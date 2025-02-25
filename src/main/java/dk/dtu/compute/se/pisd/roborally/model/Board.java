@@ -123,6 +123,7 @@ public class Board extends Subject {
         return current;
     }
         ///  testetstet
+        /// Git test 2
     public void setCurrentPlayer(Player player) {
         if (player != this.current && players.contains(player)) {
             this.current = player;
