@@ -50,7 +50,7 @@ public class BoardFactory {
         } else {
             board = new Board(8,8, name);
         }
-
+ //  test
         // add some walls, actions and checkpoints to some spaces
         Space space = board.getSpace(0,0);
         space.getWalls().add(Heading.SOUTH);
