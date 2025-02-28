@@ -57,15 +57,17 @@ public class GameController {
 
         if(space.getPlayer() == null) {
             currentPlayer.setSpace(space);
-        }
-        int PlayerNumber = board.getPlayerNumber(currentPlayer);
+            board.setCounter();
 
-        if(PlayerNumber != board.getPlayersNumber()) {
-            Player nextPlayer = board.getPlayer(PlayerNumber + 1);
-            board.setCurrentPlayer(nextPlayer);
-        } else if (PlayerNumber == board.getPlayersNumber()) {
-            int player = PlayerNumber / board.getPlayersNumber();
-            Player nextPlayer = board.getPlayer(player);
+            int PlayerNumber = board.getPlayerNumber(currentPlayer);
+
+            int totalPlayers = board.getPlayersNumber();
+
+            // Find næste spiller, og roter tilbage til start efter sidste spiller
+            int nextPlayerIndex = (PlayerNumber + 1) % totalPlayers;
+            Player nextPlayer = board.getPlayer(nextPlayerIndex);
+
+            // Opdater nuværende spiller
             board.setCurrentPlayer(nextPlayer);
         }
     }
