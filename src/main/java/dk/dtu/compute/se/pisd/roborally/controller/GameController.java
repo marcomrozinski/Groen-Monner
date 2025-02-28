@@ -63,11 +63,10 @@ public class GameController {
 
             int totalPlayers = board.getPlayersNumber();
 
-            // Find næste spiller, og roter tilbage til start efter sidste spiller
+            
             int nextPlayerIndex = (PlayerNumber + 1) % totalPlayers;
             Player nextPlayer = board.getPlayer(nextPlayerIndex);
 
-            // Opdater nuværende spiller
             board.setCurrentPlayer(nextPlayer);
         }
     }
