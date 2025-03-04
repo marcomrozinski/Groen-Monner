@@ -52,10 +52,12 @@ public class BoardView extends VBox implements ViewObserver {
 
     private SpaceEventHandler spaceEventHandler;
 
+
     public BoardView(@NotNull GameController gameController) {
         board = gameController.board;
 
         mainBoardPane = new GridPane();
+
         playersView = new PlayersView(gameController);
         statusLabel = new Label("<no status>");
 

@@ -47,7 +47,7 @@ public class AppController implements Observer {
 
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
-
+    final private List<String> boardChoices = Arrays.asList("simple", "advanced");
     final private RoboRally roboRally;
 
     private GameController gameController;
@@ -56,7 +56,9 @@ public class AppController implements Observer {
         this.roboRally = roboRally;
     }
 
+
     public void newGame() {
+
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
         dialog.setHeaderText("Select number of players");
@@ -64,27 +66,39 @@ public class AppController implements Observer {
 
         if (result.isPresent()) {
             if (gameController != null) {
-                // The UI should not allow this, but in case this happens anyway.
-                // give the user the option to save the game or abort this operation!
+                // Hvis spillet allerede kører, spørg om det skal stoppes
                 if (!stopGame()) {
                     return;
                 }
             }
 
-            // XXX the board should eventually be created programmatically or loaded from a file
-            //     here we just create an empty board with the required number of players.
-            Board board = new Board(8,8);
+            // 2 Vælg board type
+            ChoiceDialog<String> boardDialog = new ChoiceDialog<>("simple", boardChoices);
+            boardDialog.setTitle("Board Selection");
+            boardDialog.setHeaderText("Select board type");
+            Optional<String> boardResult = boardDialog.showAndWait();
+
+            if (!boardResult.isPresent()) return; // Stop hvis brugeren annullerer valget
+
+            String boardType = boardResult.get(); // Hent board valget
+
+            // Opret board via BoardFactory
+            BoardFactory factory = BoardFactory.getInstance();
+            Board board = factory.createBoard(boardType);
+
+            // Opret GameController og spillere
             gameController = new GameController(board);
             int no = result.get();
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);
-                player.setSpace(board.getSpace(i % board.width, i));
+                player.setSpace(board.getSpace(i % board.width, i)); // Spillere starter på en unik plads
             }
 
-            // XXX V2
+            // Start programmeringsfasen
             gameController.startProgrammingPhase();
 
+            // Opret board-view i UI
             roboRally.createBoardView(gameController);
         }
     }

@@ -21,7 +21,9 @@
  */
 package dk.dtu.compute.se.pisd.roborally.controller;
 
+import dk.dtu.compute.se.pisd.roborally.model.Board;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
+import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,25 +37,43 @@ import org.jetbrains.annotations.NotNull;
 public class ConveyorBelt extends FieldAction {
 
     private Heading heading;
+    private int speed; // 1 = enkelt bånd, 2 = dobbelt bånd
 
+    // KONSTRUKTOR: Sørger for at vi kan angive heading og speed
+    public ConveyorBelt(Heading heading, int speed) {
+        this.heading = heading;
+        this.speed = speed;
+    }
 
     public Heading getHeading() {
         return heading;
     }
 
-    public void setHeading(Heading heading) {
-        this.heading = heading;
+    public int getSpeed() {
+        return speed;
     }
 
-    /**
-     * Implementation of the action of a conveyor belt. Needs to be implemented for A3.
-     */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // TODO A3: needs to be implemented
-        // ...
+        if (space.getPlayer() == null || heading == null) {
+            return false;
+        }
 
-        return false;
+        Board board = space.board;
+        Player player = space.getPlayer();
+
+        // Ryk spilleren op til 'speed' felter frem
+        Space currentSpace = space;
+        for (int i = 0; i < speed; i++) {
+            Space nextSpace = board.getNeighbour(currentSpace, heading);
+            if (nextSpace == null || nextSpace.getPlayer() != null) {
+                break; // Stop hvis næste plads er optaget eller udenfor boardet
+            }
+            nextSpace.setPlayer(player);
+            currentSpace.setPlayer(null);
+            currentSpace = nextSpace;
+        }
+        return true;
     }
-
 }
+

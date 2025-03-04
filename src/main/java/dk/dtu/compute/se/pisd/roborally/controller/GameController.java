@@ -64,7 +64,7 @@ public class GameController {
 
             int totalPlayers = board.getPlayersNumber();
 
-            
+
             int nextPlayerIndex = (PlayerNumber + 1) % totalPlayers;
             Player nextPlayer = board.getPlayer(nextPlayerIndex);
 

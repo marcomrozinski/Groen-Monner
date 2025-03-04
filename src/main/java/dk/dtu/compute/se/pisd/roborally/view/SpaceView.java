@@ -37,8 +37,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-    final public static int SPACE_HEIGHT = 40; // 60; // 75;
-    final public static int SPACE_WIDTH = 40;  // 60; // 75;
+    final public static int SPACE_HEIGHT = 30; // 60; // 75;
+    final public static int SPACE_WIDTH = 30;  // 60; // 75;
 
     public final Space space;
 
@@ -46,14 +46,10 @@ public class SpaceView extends StackPane implements ViewObserver {
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
-        // XXX the following styling should better be done with styles
-        this.setPrefWidth(SPACE_WIDTH);
-        this.setMinWidth(SPACE_WIDTH);
-        this.setMaxWidth(SPACE_WIDTH);
 
-        this.setPrefHeight(SPACE_HEIGHT);
-        this.setMinHeight(SPACE_HEIGHT);
-        this.setMaxHeight(SPACE_HEIGHT);
+        this.setPrefSize(SPACE_WIDTH, SPACE_HEIGHT);
+        this.setMinSize(SPACE_WIDTH, SPACE_HEIGHT);
+        this.setMaxSize(SPACE_WIDTH, SPACE_HEIGHT);
 
         if ((space.x + space.y) % 2 == 0) {
             this.setStyle("-fx-background-color: white;");

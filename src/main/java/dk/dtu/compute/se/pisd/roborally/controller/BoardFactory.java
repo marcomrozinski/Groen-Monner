@@ -38,21 +38,14 @@ public class BoardFactory {
 
     }
 
-    /**
-     * Creates a new board of given name of a board, which indicates
-     * which type of board should be created. For now the name is ignored.
-     *
-     * @param name the given name board
-     * @return the new board corresponding to that name
-     */
     public Board createBoard(String name) {
         Board board = null;
         board = new Board(8, 8, name);
 
-        if (name.equals("advanced")) {
+        if (("advanced".equalsIgnoreCase(name))) {
             board = createAdvancedBoard();
         }
-        if (name.equals("simple")) {
+        if (("simple".equalsIgnoreCase(name))) {
             board = createSimpleBoard();
         }
         return board;
@@ -64,31 +57,26 @@ public class BoardFactory {
         // add some walls, actions and checkpoints to some spaces
         Space space = simple.getSpace(0,0);
         space.getWalls().add(Heading.SOUTH);
-        ConveyorBelt action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
+        ConveyorBelt action  = new ConveyorBelt(Heading.WEST, 2);
         space.getActions().add(action);
 
         space = simple.getSpace(1,0);
         space.getWalls().add(Heading.NORTH);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
+        action  = new ConveyorBelt(Heading.WEST, 1);
         space.getActions().add(action);
 
         space = simple.getSpace(1,1);
         space.getWalls().add(Heading.WEST);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.NORTH);
+        action  = new ConveyorBelt(Heading.NORTH, 2);
         space.getActions().add(action);
 
         space = simple.getSpace(5,5);
         space.getWalls().add(Heading.SOUTH);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
+        action  = new ConveyorBelt(Heading.WEST, 1);
         space.getActions().add(action);
 
         space = simple.getSpace(6,5);
-        action  = new ConveyorBelt();
-        action.setHeading(Heading.WEST);
+        action  = new ConveyorBelt(Heading.NORTH, 2);
         space.getActions().add(action);
 
         return simple;
@@ -99,79 +87,66 @@ public Board createAdvancedBoard() {
 
     Space space = advanced.getSpace(4,0);
     space.getWalls().add(Heading.NORTH);
-    ConveyorBelt action  = new ConveyorBelt();
-    action.setHeading(Heading.EAST);
+    ConveyorBelt action  = new ConveyorBelt(Heading.EAST, 2);
     space.getActions().add(action);
 
     space = advanced.getSpace(3,0);
     space.getWalls().add(Heading.NORTH);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.WEST);
+    action  = new ConveyorBelt(Heading.WEST, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(1,1);
     space.getWalls().add(Heading.WEST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.NORTH);
+    action  = new ConveyorBelt(Heading.NORTH, 2);
     space.getActions().add(action);
 
     space = advanced.getSpace(5,5);
     space.getWalls().add(Heading.SOUTH);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.WEST);
+    action  = new ConveyorBelt(Heading.WEST, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(6,5);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.WEST);
+    action  = new ConveyorBelt(Heading.SOUTH, 2);
     space.getActions().add(action);
 
     space = advanced.getSpace(8,2);
     space.getWalls().add(Heading.SOUTH);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.EAST);
+    action  = new ConveyorBelt(Heading.NORTH, 2);
     space.getActions().add(action);
 
     space = advanced.getSpace(9,6);
     space.getWalls().add(Heading.WEST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.NORTH);
+    action  = new ConveyorBelt(Heading.WEST, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(11,3);
     space.getWalls().add(Heading.EAST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.SOUTH);
+    action  = new ConveyorBelt(Heading.SOUTH, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(11,7);
     space.getWalls().add(Heading.SOUTH);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.EAST);
+    action  = new ConveyorBelt(Heading.WEST, 2);
     space.getActions().add(action);
 
     space = advanced.getSpace(13,6);
     space.getWalls().add(Heading.WEST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.NORTH);
+    action  = new ConveyorBelt(Heading.SOUTH, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(14,2);
     space.getWalls().add(Heading.EAST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.SOUTH);
+    action  = new ConveyorBelt(Heading.NORTH, 1);
     space.getActions().add(action);
 
     space = advanced.getSpace(15,1);
     space.getWalls().add(Heading.NORTH);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.WEST);
+    action  = new ConveyorBelt(Heading.WEST, 2);
     space.getActions().add(action);
 
-    space = advanced.getSpace(16,7);
+    space = advanced.getSpace(15,7);
     space.getWalls().add(Heading.WEST);
-    action  = new ConveyorBelt();
-    action.setHeading(Heading.SOUTH);
+    action  = new ConveyorBelt(Heading.NORTH, 2);
     space.getActions().add(action);
 
 

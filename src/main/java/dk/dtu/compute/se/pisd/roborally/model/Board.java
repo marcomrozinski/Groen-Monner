@@ -214,15 +214,16 @@ public class Board extends Subject {
 
         // TODO V1: add the move count to the status message
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
-        return "Player = " + getCurrentPlayer().getName() + " Total moves = " + getMovecount();
+        return "Player = " + getCurrentPlayer().getName() + " Total moves = " + getMoveCount();
     }
 
     public void setCounter() {
         moveCount++;
+
         notifyChange();
     }
 
-    public int getMovecount() {
+    public int getMoveCount() {
         return moveCount;
     }
 
