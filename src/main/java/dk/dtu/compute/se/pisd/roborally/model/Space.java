@@ -76,6 +76,24 @@ public class Space extends Subject {
         }
     }
 
+    public void addWall(Heading direction) {
+        if (!walls.contains(direction)) {
+            walls.add(direction);
+            notifyChange();
+        }
+    }
+
+    public void removeWall(Heading direction) {
+        if (walls.remove(direction)) {
+            notifyChange();
+        }
+}
+
+    public boolean hasWall(Heading direction) {
+        return walls.contains(direction);
+
+}
+
     /**
      * Returns the walls (actually their direction) on this space.
      * Note that clients may change this list; this should, however,
