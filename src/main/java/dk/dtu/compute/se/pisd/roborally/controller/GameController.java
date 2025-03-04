@@ -214,7 +214,22 @@ public class GameController {
 
     // TODO V2
     public void moveForward(@NotNull Player player) {
+        Space currentSpace = player.getSpace();
+        Heading playerHeading = player.getHeading();
 
+        if( currentSpace.getWalls().contains(playerHeading)) {
+            return;
+        }
+
+        Space nextSpace =  board.getNeighbour(currentSpace, playerHeading);
+
+        if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
+            return;
+        }
+        if (nextSpace.getPlayer() == null) {
+            currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
+            nextSpace.setPlayer(player); // Flyt spiller til næste felt
+        }
     }
 
     // TODO V2
