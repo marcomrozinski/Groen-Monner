@@ -58,7 +58,7 @@ public class ConveyorBelt extends FieldAction {
         if (space.getPlayer() == null || heading == null) {
             return false;
         }
-
+            // TEST TEST EMIL ER GAY
         Board board = space.board;
         Player player = space.getPlayer();
 
