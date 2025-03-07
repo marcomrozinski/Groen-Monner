@@ -234,8 +234,11 @@ public class GameController {
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
+       moveForward(player);
+       moveForward(player);
+        }
 
-    }
+
 
     // TODO V2
     public void turnRight(@NotNull Player player) {
