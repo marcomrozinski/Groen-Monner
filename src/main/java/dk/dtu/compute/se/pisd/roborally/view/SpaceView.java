@@ -22,6 +22,8 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
+import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
@@ -134,9 +136,26 @@ public class SpaceView extends StackPane implements ViewObserver {
             // XXX A3: drawing walls and action on the space (could be done
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
-
+            drawConveyorBelt();
             updatePlayer(); // Opdaterer spillerens visning i 'space'
         }
     }
+    private void drawConveyorBelt() {
+        for (FieldAction action : space.getActions()) {
+            if (action instanceof ConveyorBelt) {
+                ConveyorBelt belt = (ConveyorBelt) action;
 
+                // Opret en pil (trekant)
+                Polygon arrow = new Polygon(
+                        0.0, 0.0,
+                        10.0, 20.0,
+                        20.0, 0.0
+                );
+                arrow.setFill(Color.GRAY); // Sætter farven til grå
+                arrow.setRotate((90 * belt.getHeading().ordinal()) % 360); // Roterer pilen efter heading
+
+                this.getChildren().add(arrow);
+            }
+        }
+    }
 }
