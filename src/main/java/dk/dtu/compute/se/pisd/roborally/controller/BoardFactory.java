@@ -60,10 +60,13 @@ public class BoardFactory {
         ConveyorBelt action  = new ConveyorBelt(Heading.WEST, 2);
         space.getActions().add(action);
 
+
         space = simple.getSpace(1,0);
         space.getWalls().add(Heading.NORTH);
         action  = new ConveyorBelt(Heading.WEST, 1);
         space.getActions().add(action);
+
+        //emil er spasser
 
         space = simple.getSpace(1,1);
         space.getWalls().add(Heading.WEST);
