@@ -13,7 +13,6 @@ public class Checkpoint extends FieldAction {
         this.checkpointID = checkpointID;
     }
 
-
     public int getCheckpoint() { //Gemmer checkpoint ID for det respektive checkpoint
         return checkpointID;
 
