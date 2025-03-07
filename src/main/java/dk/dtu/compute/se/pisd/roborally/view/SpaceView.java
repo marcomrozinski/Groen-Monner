@@ -22,14 +22,11 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
-import dk.dtu.compute.se.pisd.roborally.model.Heading;
 import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
-import javafx.geometry.Pos;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -40,8 +37,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SpaceView extends StackPane implements ViewObserver {
 
-    final public static int SPACE_HEIGHT = 30; // 60; // 75;
-    final public static int SPACE_WIDTH = 30;  // 60; // 75;
+    final public static int SPACE_HEIGHT = 40; // 60; // 75;
+    final public static int SPACE_WIDTH = 40;  // 60; // 75;
 
     public final Space space;
 
@@ -49,10 +46,14 @@ public class SpaceView extends StackPane implements ViewObserver {
     public SpaceView(@NotNull Space space) {
         this.space = space;
 
+        // XXX the following styling should better be done with styles
+        this.setPrefWidth(SPACE_WIDTH);
+        this.setMinWidth(SPACE_WIDTH);
+        this.setMaxWidth(SPACE_WIDTH);
 
-        this.setPrefSize(SPACE_WIDTH, SPACE_HEIGHT);
-        this.setMinSize(SPACE_WIDTH, SPACE_HEIGHT);
-        this.setMaxSize(SPACE_WIDTH, SPACE_HEIGHT);
+        this.setPrefHeight(SPACE_HEIGHT);
+        this.setMinHeight(SPACE_HEIGHT);
+        this.setMaxHeight(SPACE_HEIGHT);
 
         if ((space.x + space.y) % 2 == 0) {
             this.setStyle("-fx-background-color: white;");
@@ -65,38 +66,6 @@ public class SpaceView extends StackPane implements ViewObserver {
         // This space view should listen to changes of the space
         space.attach(this);
         update(space);
-    }
-
-    private void drawWalls(){
-        for (Heading direction : space.getWalls()) {
-           Rectangle wall = new Rectangle(); // Opretter en ny retangel for væggen
-
-            // Bestemmer væggens størrelse og placering baseret på retning
-           switch (direction) {
-               case NORTH:
-                   wall = new Rectangle(SPACE_WIDTH, 5, Color.RED); // Opretter 'NORTH' væg
-                   wall.setY(0); // Placerer væggen øverst
-                   break;
-
-               case SOUTH:
-                       wall = new Rectangle(SPACE_WIDTH, 5, Color.RED); // Opretter 'SOUTH' væg
-                       wall.setY(SPACE_HEIGHT - 5); // Placerer væggen nederst
-                       break;
-
-               case EAST:
-                   wall = new Rectangle(5, SPACE_WIDTH, Color.RED); // Opretter 'EAST' væg
-                   wall.setX(SPACE_HEIGHT - 5); // Placerer væggen til højre
-                   break;
-
-               case WEST:
-                   wall = new Rectangle(5, SPACE_HEIGHT, Color.RED); // Opretter 'WEST' væg
-                   wall.setX(0); // Placerer væggen til venstre
-                   break;
-           }
-
-           // Tilføjer den definerede væg til 'SpaceView'
-           this.getChildren().add(wall);
-        }
     }
 
     private void updatePlayer() {
@@ -118,24 +87,14 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
-        // Kontrollerer om opdateringen er relevant for dette 'space'
         if (subject == this.space) {
-            // fjerner tidligere grafik
             this.getChildren().clear();
-
-            // Skifter baggrundsfarve på 'space' position
-            if ((space.x + space.y) % 2 == 0) {
-                this.setStyle("-fx-background-color: white;"); // Hvid baggrund
-            } else {
-                this.setStyle("-fx-background-color: black;"); // Sort baggrund
-            }
-            drawWalls(); // Tegner vægge i dette 'space'
 
             // XXX A3: drawing walls and action on the space (could be done
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
 
-            updatePlayer(); // Opdaterer spillerens visning i 'space'
+            updatePlayer();
         }
     }
 
