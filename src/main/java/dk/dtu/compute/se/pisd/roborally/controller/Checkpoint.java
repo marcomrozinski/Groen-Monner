@@ -18,7 +18,7 @@ public class Checkpoint extends FieldAction {
 
     }
 
-    @Override // WIP: Checkpoint kommandoen som skal updatere spillet efter en spiller har fået et checkpoint
+    @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         Player player = space.getPlayer();
         if (player != null && player == gameController.board.getCurrentPlayer()) {
