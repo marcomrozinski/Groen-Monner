@@ -45,7 +45,7 @@ public class GameController {
      *
      * @param space the space to which the current player should move
      */
-    public void moveCurrentPlayerToSpace(@NotNull Space space)  {
+    public void moveCurrentPlayerToSpace(@NotNull Space space) {
         // TODO V1: method should be implemented by the students:
         //   - the current player should be moved to the given space
         //     (if it is free())
@@ -56,7 +56,7 @@ public class GameController {
         //     message needs to be implemented at another place)
         Player currentPlayer = board.getCurrentPlayer();
 
-        if(space.getPlayer() == null) {
+        if (space.getPlayer() == null) {
             currentPlayer.setSpace(space);
             board.setCounter();
 
@@ -217,11 +217,11 @@ public class GameController {
         Space currentSpace = player.getSpace();
         Heading playerHeading = player.getHeading();
 
-        if( currentSpace.getWalls().contains(playerHeading)) {
+        if (currentSpace.getWalls().contains(playerHeading)) {
             return;
         }
 
-        Space nextSpace =  board.getNeighbour(currentSpace, playerHeading);
+        Space nextSpace = board.getNeighbour(currentSpace, playerHeading);
 
         if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
             return;
@@ -239,13 +239,36 @@ public class GameController {
 
     // TODO V2
     public void turnRight(@NotNull Player player) {
+        Space currentSpace = player.getSpace();
+        Heading newHeading = player.getHeading().next();
+        Space nextSpace = board.getNeighbour(currentSpace, newHeading);
 
+        if (currentSpace.getWalls().contains(newHeading)) {
+            return;
+        }
+
+        if (nextSpace != null && nextSpace.getWalls().contains(newHeading.prev().prev())) {
+            return;
+        }
+        player.setHeading(newHeading);
     }
 
     // TODO V2
     public void turnLeft(@NotNull Player player) {
+        Space currentSpace = player.getSpace();
+        Heading newHeading = player.getHeading().prev();
+        Space nextSpace = board.getNeighbour(currentSpace, newHeading);
 
+        if (currentSpace.getWalls().contains(newHeading)) {
+            return;
+        }
+
+        if (nextSpace != null && nextSpace.getWalls().contains(newHeading.prev().prev())) {
+            return;
+        }
+        player.setHeading(newHeading);
     }
+
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
@@ -267,5 +290,4 @@ public class GameController {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
     }
-
 }
