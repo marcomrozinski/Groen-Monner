@@ -138,7 +138,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
     private void drawConveyorBelt() {
         for (FieldAction action : space.getActions()) {
-            if (action instanceof ConveyorBelt && ((ConveyorBelt) action).getHeading() != Heading.EAST) {
+            if (action instanceof ConveyorBelt) {
                 ConveyorBelt belt = (ConveyorBelt) action;
 
                 // Opret en pil (trekant)
