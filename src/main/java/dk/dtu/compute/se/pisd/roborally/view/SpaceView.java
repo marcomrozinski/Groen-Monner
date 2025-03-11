@@ -22,6 +22,7 @@
 package dk.dtu.compute.se.pisd.roborally.view;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
+import dk.dtu.compute.se.pisd.roborally.controller.Checkpoint;
 import dk.dtu.compute.se.pisd.roborally.controller.ConveyorBelt;
 import dk.dtu.compute.se.pisd.roborally.controller.FieldAction;
 import dk.dtu.compute.se.pisd.roborally.model.Heading;
@@ -134,6 +135,7 @@ public class SpaceView extends StackPane implements ViewObserver {
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
             drawConveyorBelt();
+            drawCheckPoint();
             updatePlayer(); // Opdaterer spillerens visning i 'space'
         }
     }
@@ -153,6 +155,24 @@ public class SpaceView extends StackPane implements ViewObserver {
 
                 this.getChildren().add(arrow);
 
+            }
+        }
+    }
+    private void drawCheckPoint() {
+        for(FieldAction action : space.getActions()) {
+            if (action instanceof Checkpoint) {
+                Checkpoint checkpoint = (Checkpoint) action;
+
+                Polygon checkpointShape = new Polygon(
+                        0.0, 10.0,
+                        10.0, -10.0,
+                        -10.0, -10.0
+                );
+
+                checkpointShape.setFill(Color.YELLOW); // Gul farve
+                checkpointShape.setStroke(Color.BLACK); // Sort kant
+
+                this.getChildren().add(checkpointShape);
             }
         }
     }
