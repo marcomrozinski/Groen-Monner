@@ -93,10 +93,6 @@ public Board createAdvancedBoard() {
     ConveyorBelt action  = new ConveyorBelt(Heading.EAST, 2);
     space.getActions().add(action);
 
-    space = advanced.getSpace(3,0);
-    space.getWalls().add(Heading.NORTH);
-    action  = new ConveyorBelt(Heading.WEST, 1);
-    space.getActions().add(action);
 
     space = advanced.getSpace(1,1);
     space.getWalls().add(Heading.WEST);
@@ -108,9 +104,6 @@ public Board createAdvancedBoard() {
     action  = new ConveyorBelt(Heading.WEST, 1);
     space.getActions().add(action);
 
-    space = advanced.getSpace(6,5);
-    action  = new ConveyorBelt(Heading.SOUTH, 2);
-    space.getActions().add(action);
 
     space = advanced.getSpace(8,2);
     space.getWalls().add(Heading.SOUTH);
