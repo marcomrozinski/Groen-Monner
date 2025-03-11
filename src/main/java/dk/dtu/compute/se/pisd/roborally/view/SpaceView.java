@@ -40,6 +40,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+
 public class SpaceView extends StackPane implements ViewObserver {
 
     final public static int SPACE_HEIGHT = 30; // 60; // 75;
@@ -157,3 +158,5 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
 }
+
+// Hola

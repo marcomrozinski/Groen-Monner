@@ -53,12 +53,15 @@ public class ConveyorBelt extends FieldAction {
         return speed;
     }
 
+    /**
+     * Implementation of the action of a conveyor belt. Needs to be implemented for A3.
+     */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         if (space.getPlayer() == null || heading == null) {
             return false;
         }
-            // TEST TEST EMIL ER GAY
+
         Board board = space.board;
         Player player = space.getPlayer();
 

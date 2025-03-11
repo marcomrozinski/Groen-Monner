@@ -36,6 +36,7 @@ class GameControllerTest {
     /**
      * Test for Assignment V1 (can be deleted later once V1 was shown to the teacher)
      */
+
     @Test
     void testV1() {
         Board board = gameController.board;
