@@ -69,37 +69,33 @@ public class SpaceView extends StackPane implements ViewObserver {
         update(space);
     }
 
-    private void drawWalls(){
+    private void drawWalls() {
         for (Heading direction : space.getWalls()) {
-           Rectangle wall = new Rectangle(); // Opretter en ny retangel for væggen
+            Rectangle wall = new Rectangle();
 
-            // Bestemmer væggens størrelse og placering baseret på retning
-           switch (direction) {
-               case NORTH:
-                   wall = new Rectangle(SPACE_WIDTH, 5, Color.RED); // Opretter 'NORTH' væg
-                   wall.setY(0); // Placerer væggen øverst
-                   break;
+            switch (direction) {
+                case SOUTH:
+                    wall = new Rectangle(SPACE_WIDTH, 3, Color.RED);
+                    wall.setTranslateY(SPACE_HEIGHT / 2.0 - 1.5);
+                    break;
 
-               case SOUTH:
-                       wall = new Rectangle(SPACE_WIDTH, 5, Color.RED); // Opretter 'SOUTH' væg
-                       wall.setY(SPACE_HEIGHT - 5); // Placerer væggen nederst
-                       break;
+                case EAST:
+                    wall = new Rectangle(3, SPACE_HEIGHT, Color.RED);
+                    wall.setTranslateX(SPACE_WIDTH / 2.0 - 1.5);
+                    break;
 
-               case EAST:
-                   wall = new Rectangle(5, SPACE_WIDTH, Color.RED); // Opretter 'EAST' væg
-                   wall.setX(SPACE_HEIGHT - 5); // Placerer væggen til højre
-                   break;
+                case WEST:
+                    wall = new Rectangle(3, SPACE_HEIGHT, Color.RED);
+                    wall.setTranslateX(-SPACE_WIDTH / 2.0 + 1.5); // Flytter en smule højre
+                    break;
+            }
 
-               case WEST:
-                   wall = new Rectangle(5, SPACE_HEIGHT, Color.RED); // Opretter 'WEST' væg
-                   wall.setX(0); // Placerer væggen til venstre
-                   break;
-           }
-
-           // Tilføjer den definerede væg til 'SpaceView'
-           this.getChildren().add(wall);
+            this.getChildren().add(wall);
         }
     }
+
+
+
 
     private void updatePlayer() {
         Player player = space.getPlayer();
@@ -142,7 +138,7 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
     private void drawConveyorBelt() {
         for (FieldAction action : space.getActions()) {
-            if (action instanceof ConveyorBelt) {
+            if (action instanceof ConveyorBelt && ((ConveyorBelt) action).getHeading() != Heading.EAST) {
                 ConveyorBelt belt = (ConveyorBelt) action;
 
                 // Opret en pil (trekant)
@@ -155,7 +151,9 @@ public class SpaceView extends StackPane implements ViewObserver {
                 arrow.setRotate((90 * belt.getHeading().ordinal()) % 360); // Roterer pilen efter heading
 
                 this.getChildren().add(arrow);
+
             }
         }
     }
+
 }
