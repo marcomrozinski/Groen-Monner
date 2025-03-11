@@ -184,28 +184,36 @@ public class Board extends Subject {
      * @return the space in the given direction; null if there is no (reachable) neighbour
      */
     public Space getNeighbour(@NotNull Space space, @NotNull Heading heading) {
-        // TODO A3: This implementation needs to be adjusted so that walls on
-        //          spaces (and maybe other obstacles) are taken into account
-        //          (see above JavaDoc comment for this method).
         int x = space.x;
         int y = space.y;
+
+        if (space.getWalls().contains(heading)) {
+            return null; // Der er en væg, så vi kan ikke bevæge os i den retning.
+        }
+
+        Space neighbour = null;
         switch (heading) {
             case SOUTH:
-                y = (y + 1) % height;
+                neighbour = getSpace(x, y + 1);
+                if (neighbour != null && neighbour.getWalls().contains(Heading.NORTH)) return null;
                 break;
             case WEST:
-                x = (x + width - 1) % width;
+                neighbour = getSpace(x - 1, y);
+                if (neighbour != null && neighbour.getWalls().contains(Heading.EAST)) return null;
                 break;
             case NORTH:
-                y = (y + height - 1) % height;
+                neighbour = getSpace(x, y - 1);
+                if (neighbour != null && neighbour.getWalls().contains(Heading.SOUTH)) return null;
                 break;
             case EAST:
-                x = (x + 1) % width;
+                neighbour = getSpace(x + 1, y);
+                if (neighbour != null && neighbour.getWalls().contains(Heading.WEST)) return null;
                 break;
         }
 
-        return getSpace(x, y);
+        return neighbour;
     }
+
 
     public String getStatusMessage() {
         // this is actually a view aspect, but for making assignment V1 easy for
