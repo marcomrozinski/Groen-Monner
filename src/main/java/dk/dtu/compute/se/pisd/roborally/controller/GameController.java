@@ -239,10 +239,15 @@ public class GameController {
         Space currentSpace = player.getSpace();
         Space nextSpace = board.getNeighbour(currentSpace, heading);
         if (nextSpace != null) {
-            nextSpace.setPlayer(player);
+            if (nextSpace.getPlayer() != null) { // Hvis en spiller allerede står der
+                move(nextSpace.getPlayer(), heading); // Skub den anden spiller videre i samme retning
+            }
+            if (nextSpace.getPlayer() == null) { // Hvis feltet er ledigt efter skubning
+                currentSpace.setPlayer(null);
+                nextSpace.setPlayer(player);
+            }
+
         }
-
-
     }
 
     public void moveForward(@NotNull Player player) {
