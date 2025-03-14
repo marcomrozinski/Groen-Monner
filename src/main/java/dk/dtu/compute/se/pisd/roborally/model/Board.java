@@ -102,17 +102,6 @@ public class Board extends Subject {
         }
     }
 
-    public List<Space> getSpaces() {
-        List<Space> spacesList = new ArrayList<>();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                spacesList.add(getSpace(x, y));
-            }
-        }
-        return spacesList;
-    }
-
-
     public int getPlayersNumber() {
         return players.size();
     }

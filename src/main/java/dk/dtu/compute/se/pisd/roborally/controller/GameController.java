@@ -228,9 +228,6 @@ public class GameController {
                 case BACKWARD:
                     this.backwards(player);
                     break;
-                case LEFT_OR_RIGHT:
-                    //this.LeftOrRight(player);
-                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -257,28 +254,28 @@ public class GameController {
         move(player, player.getHeading());
     }
 
-       /** if (currentSpace.getWalls().contains(playerHeading)) {
-            return;
-        }
+    /** if (currentSpace.getWalls().contains(playerHeading)) {
+     return;
+     }
 
-        Space nextSpace = board.getNeighbour(currentSpace, playerHeading);
+     Space nextSpace = board.getNeighbour(currentSpace, playerHeading);
 
-        if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
-            return;
-        }
-        if (nextSpace.getPlayer() == null) {
-            currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
-            nextSpace.setPlayer(player); // Flyt spiller til næste felt
-        }
-    } */
+     if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
+     return;
+     }
+     if (nextSpace.getPlayer() == null) {
+     currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
+     nextSpace.setPlayer(player); // Flyt spiller til næste felt
+     }
+     } */
 
 
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
-       moveForward(player);
-       moveForward(player);
-        }
+        moveForward(player);
+        moveForward(player);
+    }
 
 
     // TODO V2
@@ -326,7 +323,6 @@ public class GameController {
         turnRight(player);
     }
 
-    
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
@@ -346,9 +342,5 @@ public class GameController {
     public void notImplemented() {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
-    }
-    public void setWinner(Player winner) {
-      return;
-     }
     }
 }
