@@ -33,6 +33,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -177,50 +179,14 @@ public class SpaceView extends StackPane implements ViewObserver {
                 hexagon.setFill(Color.YELLOW); // Sætter farven til gul
                 hexagon.setStroke(Color.BLACK); // Tilføjer sort kant
 
+                Text numberText = new Text(String.valueOf(checkpointNumber)); // Konverter tallet til tekst
+                numberText.setFont(new Font(14)); // Sæt skriftstørrelse
 
 
-                // Opret en gruppe af linjer til at vise tallet i midten af hexagonen
-                Polygon line1 = new Polygon();
-                Polygon line2 = new Polygon();
-                Polygon line3 = new Polygon();
+                // Tilføj hexagon og tal til scenen
+                this.getChildren().addAll(hexagon, numberText);
 
-                if (checkpointNumber == 1) {
-                    // Tegn en lodret linje for "1"
-                    line1.getPoints().addAll(
-                            0.0, -4.0,
-                            0.5, 4.0,
-                            -0.5, 4.0
-                    );
-                    this.getChildren().addAll(hexagon, line1);
 
-                } else if (checkpointNumber == 2) {
-                    // Tegn to separate linjer for "2"
-                    line1.getPoints().addAll(
-                            -3.0, -3.0,
-                            3.0, -3.0
-                    );
-                    line2.getPoints().addAll(
-                            3.0, -3.0,
-                            -3.0, 3.0
-                    );
-                    this.getChildren().addAll(hexagon, line1, line2);
-
-                } else if (checkpointNumber == 3) {
-                    // Tegn tre separate linjer for "3"
-                    line1.getPoints().addAll(
-                            -3.0, -4.0,
-                            3.0, -4.0
-                    );
-                    line2.getPoints().addAll(
-                            -3.0, 0.0,
-                            3.0, 0.0
-                    );
-                    line3.getPoints().addAll(
-                            -3.0, 4.0,
-                            3.0, 4.0
-                    );
-                    this.getChildren().addAll(hexagon, line1, line2, line3);
-                }
             }
         }
     }
