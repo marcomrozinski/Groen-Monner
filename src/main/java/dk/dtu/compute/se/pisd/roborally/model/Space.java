@@ -44,7 +44,7 @@ public class Space extends Subject {
 
 
     // XXX A3
-    private List<Heading> walls = new ArrayList<>();
+    private final List<Heading> walls = new ArrayList<>();
 
     // XXX A3
     private List<FieldAction> actions = new ArrayList<>();

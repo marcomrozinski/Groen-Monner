@@ -42,16 +42,12 @@ public class ConveyorBelt extends FieldAction {
     // KONSTRUKTOR: Sørger for at vi kan angive heading og speed
     public ConveyorBelt(Heading heading, int speed) {
         this.heading = heading;
-        this.speed = speed;
     }
 
     public Heading getHeading() {
         return heading;
     }
 
-    public int getSpeed() {
-        return speed;
-    }
 
     /**
      * Implementation of the action of a conveyor belt. Needs to be implemented for A3.
@@ -64,18 +60,8 @@ public class ConveyorBelt extends FieldAction {
 
         Board board = space.board;
         Player player = space.getPlayer();
+        gameController.move(player, heading);
 
-        // Ryk spilleren op til 'speed' felter frem
-        Space currentSpace = space;
-        for (int i = 0; i < speed; i++) {
-            Space nextSpace = board.getNeighbour(currentSpace, heading);
-            if (nextSpace == null || nextSpace.getPlayer() != null) {
-                break; // Stop hvis næste plads er optaget eller udenfor boardet
-            }
-            nextSpace.setPlayer(player);
-            currentSpace.setPlayer(null);
-            currentSpace = nextSpace;
-        }
         return true;
     }
 }

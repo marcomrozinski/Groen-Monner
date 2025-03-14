@@ -33,6 +33,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -162,17 +164,29 @@ public class SpaceView extends StackPane implements ViewObserver {
         for(FieldAction action : space.getActions()) {
             if (action instanceof Checkpoint) {
                 Checkpoint checkpoint = (Checkpoint) action;
+                int checkpointNumber = checkpoint.getCheckpoint();
 
-                Polygon checkpointShape = new Polygon(
+                // Opret en sekskant (hexagon) som repræsentation af checkpointet
+                Polygon hexagon = new Polygon(
+                        0.0, -10.0,
+                        8.66, -5.0,
+                        8.66, 5.0,
                         0.0, 10.0,
-                        10.0, -10.0,
-                        -10.0, -10.0
+                        -8.66, 5.0,
+                        -8.66, -5.0
                 );
 
-                checkpointShape.setFill(Color.YELLOW); // Gul farve
-                checkpointShape.setStroke(Color.BLACK); // Sort kant
+                hexagon.setFill(Color.YELLOW); // Sætter farven til gul
+                hexagon.setStroke(Color.BLACK); // Tilføjer sort kant
 
-                this.getChildren().add(checkpointShape);
+                Text numberText = new Text(String.valueOf(checkpointNumber)); // Konverter tallet til tekst
+                numberText.setFont(new Font(14)); // Sæt skriftstørrelse
+
+
+                // Tilføj hexagon og tal til scenen
+                this.getChildren().addAll(hexagon, numberText);
+
+
             }
         }
     }

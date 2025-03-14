@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * ...
  * TODO: we should really write these docstrings, else Carlos will fail us all
@@ -167,6 +169,7 @@ public class GameController {
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
+                    executeFieldActions();
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
@@ -183,6 +186,19 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    private void executeFieldActions() {
+        for(int i = 0; i < board.getPlayersNumber(); i++) {
+            Player currentPlayer = board.getPlayer(i);
+            Space space = currentPlayer.getSpace();
+            if (space != null) {
+                List<FieldAction> actions = space.getActions();
+                for(FieldAction action : actions ) {
+                    action.doAction(this , space);
+                }
+            }
         }
     }
 
@@ -222,11 +238,26 @@ public class GameController {
     }
 
     // TODO V2
-    public void moveForward(@NotNull Player player) {
+    public void move (Player player, Heading heading) {
         Space currentSpace = player.getSpace();
-        Heading playerHeading = player.getHeading();
+        Space nextSpace = board.getNeighbour(currentSpace, heading);
+        if (nextSpace != null) {
+            if (nextSpace.getPlayer() != null) { // Hvis en spiller allerede står der
+                move(nextSpace.getPlayer(), heading); // Skub den anden spiller videre i samme retning
+            }
+            if (nextSpace.getPlayer() == null) { // Hvis feltet er ledigt efter skubning
+                currentSpace.setPlayer(null);
+                nextSpace.setPlayer(player);
+            }
 
-        if (currentSpace.getWalls().contains(playerHeading)) {
+        }
+    }
+
+    public void moveForward(@NotNull Player player) {
+        move(player, player.getHeading());
+    }
+
+       /** if (currentSpace.getWalls().contains(playerHeading)) {
             return;
         }
 
@@ -239,14 +270,15 @@ public class GameController {
             currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
             nextSpace.setPlayer(player); // Flyt spiller til næste felt
         }
-    }
+    } */
+
+
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
        moveForward(player);
        moveForward(player);
         }
-
 
 
     // TODO V2
