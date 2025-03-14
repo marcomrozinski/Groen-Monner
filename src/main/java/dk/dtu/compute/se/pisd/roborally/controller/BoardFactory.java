@@ -66,7 +66,6 @@ public class BoardFactory {
         action  = new ConveyorBelt(Heading.WEST, 1);
         space.getActions().add(action);
 
-        //emil er spasser
 
         space = simple.getSpace(1,1);
         space.getWalls().add(Heading.WEST);

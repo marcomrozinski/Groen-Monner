@@ -212,6 +212,9 @@ public class GameController {
                 case BACKWARD:
                     this.backwards(player);
                     break;
+                case LEFT_OR_RIGHT:
+                    this.LeftOrRight(player);
+                    break;
                 default:
                     // DO NOTHING (for now)
             }
@@ -291,6 +294,7 @@ public class GameController {
         turnRight(player);
     }
 
+    
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
@@ -310,5 +314,9 @@ public class GameController {
     public void notImplemented() {
         // XXX just for now to indicate that the actual method is not yet implemented
         assert false;
+    }
+    public void setWinner(Player winner) {
+      return;
+     }
     }
 }
