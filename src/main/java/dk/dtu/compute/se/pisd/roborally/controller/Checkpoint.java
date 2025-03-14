@@ -21,15 +21,20 @@ public class Checkpoint extends FieldAction {
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         Player player = space.getPlayer();
-        if (player != null && player == gameController.board.getCurrentPlayer()) {
+        if (player != null) {
             if (checkpointID == 1 || player.getReachedCheckpoint().contains(checkpointID - 1)) {
                 if (!player.getReachedCheckpoint().contains(checkpointID)) {
                     player.getReachedCheckpoint().add(checkpointID);
+
+                    // Tjek om spilleren har vundet
+                    gameController.checkWinCondition(player);
+
                     return true;
                 }
             }
-            // Checker hvis en spiller ikke har fået et givet checkpointID, og dernæst tilføjer det til dered ReachedCheckpoint liste
         }
         return false;
     }
+
+
 }
