@@ -222,7 +222,7 @@ public class Board extends Subject {
 
         // TODO V1: add the move count to the status message
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
-        return "Player = " + getCurrentPlayer().getName() + " Total moves = " + getMoveCount();
+        return "Player = " + getCurrentPlayer().getName() + "| Total moves = " + getMoveCount();
     }
 
     public void setCounter() {
@@ -232,7 +232,9 @@ public class Board extends Subject {
     }
 
     public int getMoveCount() {
-        return moveCount;
+        int playerCount = getPlayersNumber();
+        int actualMoves = playerCount > 0 ? moveCount / playerCount : moveCount;
+        return actualMoves;
     }
 
 }
