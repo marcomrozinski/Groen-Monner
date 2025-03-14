@@ -162,17 +162,65 @@ public class SpaceView extends StackPane implements ViewObserver {
         for(FieldAction action : space.getActions()) {
             if (action instanceof Checkpoint) {
                 Checkpoint checkpoint = (Checkpoint) action;
+                int checkpointNumber = checkpoint.getCheckpoint();
 
-                Polygon checkpointShape = new Polygon(
+                // Opret en sekskant (hexagon) som repræsentation af checkpointet
+                Polygon hexagon = new Polygon(
+                        0.0, -10.0,
+                        8.66, -5.0,
+                        8.66, 5.0,
                         0.0, 10.0,
-                        10.0, -10.0,
-                        -10.0, -10.0
+                        -8.66, 5.0,
+                        -8.66, -5.0
                 );
 
-                checkpointShape.setFill(Color.YELLOW); // Gul farve
-                checkpointShape.setStroke(Color.BLACK); // Sort kant
+                hexagon.setFill(Color.YELLOW); // Sætter farven til gul
+                hexagon.setStroke(Color.BLACK); // Tilføjer sort kant
 
-                this.getChildren().add(checkpointShape);
+
+
+                // Opret en gruppe af linjer til at vise tallet i midten af hexagonen
+                Polygon line1 = new Polygon();
+                Polygon line2 = new Polygon();
+                Polygon line3 = new Polygon();
+
+                if (checkpointNumber == 1) {
+                    // Tegn en lodret linje for "1"
+                    line1.getPoints().addAll(
+                            0.0, -4.0,
+                            0.5, 4.0,
+                            -0.5, 4.0
+                    );
+                    this.getChildren().addAll(hexagon, line1);
+
+                } else if (checkpointNumber == 2) {
+                    // Tegn to separate linjer for "2"
+                    line1.getPoints().addAll(
+                            -3.0, -3.0,
+                            3.0, -3.0
+                    );
+                    line2.getPoints().addAll(
+                            3.0, -3.0,
+                            -3.0, 3.0
+                    );
+                    this.getChildren().addAll(hexagon, line1, line2);
+
+                } else if (checkpointNumber == 3) {
+                    // Tegn tre separate linjer for "3"
+                    line1.getPoints().addAll(
+                            -3.0, -4.0,
+                            3.0, -4.0
+                    );
+                    line2.getPoints().addAll(
+                            -3.0, 0.0,
+                            3.0, 0.0
+                    );
+                    line3.getPoints().addAll(
+                            -3.0, 4.0,
+                            3.0, 4.0
+                    );
+                    this.getChildren().addAll(hexagon, line1, line2, line3);
+                }
             }
         }
     }
