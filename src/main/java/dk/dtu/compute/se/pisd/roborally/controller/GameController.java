@@ -251,10 +251,10 @@ public class GameController {
     }
 
     public void moveForward(@NotNull Player player) {
-        Space currentSpace = player.getSpace();
-        Heading playerHeading = player.getHeading();
+        move(player, player.getHeading());
+    }
 
-        if (currentSpace.getWalls().contains(playerHeading)) {
+       /** if (currentSpace.getWalls().contains(playerHeading)) {
             return;
         }
 
@@ -267,7 +267,7 @@ public class GameController {
             currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
             nextSpace.setPlayer(player); // Flyt spiller til næste felt
         }
-    }
+    } */
 
 
 
@@ -276,7 +276,6 @@ public class GameController {
        moveForward(player);
        moveForward(player);
         }
-
 
 
     // TODO V2
