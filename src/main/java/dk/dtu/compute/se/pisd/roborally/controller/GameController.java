@@ -24,6 +24,8 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 /**
  * ...
  * TODO: we should really write these docstrings, else Carlos will fail us all
@@ -167,6 +169,7 @@ public class GameController {
                 if (nextPlayerNumber < board.getPlayersNumber()) {
                     board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
                 } else {
+                    executeFieldActions();
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         makeProgramFieldsVisible(step);
@@ -183,6 +186,19 @@ public class GameController {
         } else {
             // this should not happen
             assert false;
+        }
+    }
+
+    private void executeFieldActions() {
+        for(int i = 0; i < board.getPlayersNumber(); i++) {
+            Player currentPlayer = board.getPlayer(i);
+            Space space = currentPlayer.getSpace();
+            if (space != null) {
+                List<FieldAction> actions = space.getActions();
+                for(FieldAction action : actions ) {
+                    action.doAction(this , space);
+                }
+            }
         }
     }
 
@@ -219,6 +235,16 @@ public class GameController {
     }
 
     // TODO V2
+    public void move (Player player, Heading heading) {
+        Space currentSpace = player.getSpace();
+        Space nextSpace = board.getNeighbour(currentSpace, heading);
+        if (nextSpace != null) {
+            nextSpace.setPlayer(player);
+        }
+
+
+    }
+
     public void moveForward(@NotNull Player player) {
         Space currentSpace = player.getSpace();
         Heading playerHeading = player.getHeading();
@@ -237,6 +263,8 @@ public class GameController {
             nextSpace.setPlayer(player); // Flyt spiller til næste felt
         }
     }
+
+
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
