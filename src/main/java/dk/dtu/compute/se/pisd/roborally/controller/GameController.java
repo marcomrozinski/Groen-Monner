@@ -229,7 +229,7 @@ public class GameController {
                     this.backwards(player);
                     break;
                 case LEFT_OR_RIGHT:
-                    this.LeftOrRight(player);
+                    //this.LeftOrRight(player);
                     break;
                 default:
                     // DO NOTHING (for now)
