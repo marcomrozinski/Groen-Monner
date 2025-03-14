@@ -254,28 +254,28 @@ public class GameController {
         move(player, player.getHeading());
     }
 
-       /** if (currentSpace.getWalls().contains(playerHeading)) {
-            return;
-        }
+    /** if (currentSpace.getWalls().contains(playerHeading)) {
+     return;
+     }
 
-        Space nextSpace = board.getNeighbour(currentSpace, playerHeading);
+     Space nextSpace = board.getNeighbour(currentSpace, playerHeading);
 
-        if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
-            return;
-        }
-        if (nextSpace.getPlayer() == null) {
-            currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
-            nextSpace.setPlayer(player); // Flyt spiller til næste felt
-        }
-    } */
+     if (nextSpace == null || nextSpace.getWalls().contains(playerHeading)) {
+     return;
+     }
+     if (nextSpace.getPlayer() == null) {
+     currentSpace.setPlayer(null); // Fjern spiller fra nuværende felt
+     nextSpace.setPlayer(player); // Flyt spiller til næste felt
+     }
+     } */
 
 
 
     // TODO V2
     public void fastForward(@NotNull Player player) {
-       moveForward(player);
-       moveForward(player);
-        }
+        moveForward(player);
+        moveForward(player);
+    }
 
 
     // TODO V2

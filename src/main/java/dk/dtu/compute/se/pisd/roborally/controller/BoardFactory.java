@@ -158,7 +158,7 @@ public class BoardFactory {
         space.getActions().add(checkpoint) ;
 
         return advanced;
-}
+    }
 
 
 }
