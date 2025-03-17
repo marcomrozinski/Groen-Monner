@@ -37,10 +37,9 @@ import org.jetbrains.annotations.NotNull;
 public class ConveyorBelt extends FieldAction {
 
     private Heading heading;
-    private int speed; // 1 = enkelt bånd, 2 = dobbelt bånd
 
-    // KONSTRUKTOR: Sørger for at vi kan angive heading og speed
-    public ConveyorBelt(Heading heading, int speed) {
+    // KONSTRUKTOR: Sørger for at vi kan angive heading
+    public ConveyorBelt(Heading heading) {
         this.heading = heading;
     }
 

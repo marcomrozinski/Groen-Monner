@@ -122,7 +122,7 @@ public class LoadBoard {
     private static FieldAction convert(ActionTemplate actionTemplate) {
         if (actionTemplate instanceof ConveyorBeltTemplate) {
             ConveyorBeltTemplate template = (ConveyorBeltTemplate) actionTemplate;
-            return new ConveyorBelt(template.heading,1);
+            return new ConveyorBelt(template.heading);
         } // else if ...
         // XXX if new field actions are added, the corresponding templates
         //     need to be added to the model subpackage of fileaccess and

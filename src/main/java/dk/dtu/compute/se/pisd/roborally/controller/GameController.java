@@ -24,7 +24,6 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
 import javafx.scene.control.Alert;
-import javafx.application.Platform;
 import java.util.List;
 
 /**
@@ -229,6 +228,7 @@ public class GameController {
                 case BACKWARD:
                     this.backwards(player);
                     break;
+                case LEFT_OR_RIGHT:
                 default:
                     // DO NOTHING (for now)
             }
@@ -323,6 +323,8 @@ public class GameController {
         turnRight(player);
         turnRight(player);
     }
+
+
 
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
