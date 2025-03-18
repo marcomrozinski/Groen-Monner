@@ -35,27 +35,27 @@ import java.util.List;
  */
 public class GameController {
 
+    /**
+     * Repræsenterer spillebrættet, der hører til denne spilcontroller.
+     */
     final public Board board;
 
+    /**
+     * Opretter en ny GameController-instans med det angivne spillebræt.
+     *
+     * @param board det tilknyttede spillebræt; må ikke være null
+     */
     public GameController(@NotNull Board board) {
         this.board = board;
     }
 
     /**
-     * This is just some dummy controller operation to make a simple move to see something
-     * happening on the board. This method should eventually be deleted!
+     * Flytter den aktuelle spiller til det angivne felt, hvis feltet er ledigt.
+     * Herefter opdateres tælleren, og turen gives videre til næste spiller.
      *
-     * @param space the space to which the current player should move
+     * @param space det felt, som spilleren skal flyttes til; må ikke være null
      */
     public void moveCurrentPlayerToSpace(@NotNull Space space) {
-        // TODO V1: method should be implemented by the students:
-        //   - the current player should be moved to the given space
-        //     (if it is free())
-        //   - and the current player should be set to the player
-        //     following the current player
-        //   - the counter of moves in the game should be increased by one
-        //     if and when the player is moved (the counter and the status line
-        //     message needs to be implemented at another place)
         Player currentPlayer = board.getCurrentPlayer();
 
         if (space.getPlayer() == null) {
@@ -63,9 +63,7 @@ public class GameController {
             board.setCounter();
 
             int PlayerNumber = board.getPlayerNumber(currentPlayer);
-
             int totalPlayers = board.getPlayersNumber();
-
 
             int nextPlayerIndex = (PlayerNumber + 1) % totalPlayers;
             Player nextPlayer = board.getPlayer(nextPlayerIndex);
@@ -74,7 +72,12 @@ public class GameController {
         }
     }
 
-    // XXX V2
+
+    /**
+     * Starter programmeringsfasen i spillet.
+     * Nulstiller alle spilleres programmeringsfelter og giver dem nye tilfældige kommandokort.
+     * Sætter spillets fase til PROGRAMMING, nulstiller trintælleren og sætter den første spiller som aktuel spiller.
+     */
     public void startProgrammingPhase() {
         board.setPhase(Phase.PROGRAMMING);
         board.setCurrentPlayer(board.getPlayer(0));
@@ -97,14 +100,24 @@ public class GameController {
         }
     }
 
-    // XXX V2
+
+    /**
+     * Genererer og returnerer et tilfældigt kommandokort.
+     *
+     * @return et nyt CommandCard med en tilfældigt valgt kommando
+     */
     private CommandCard generateRandomCommandCard() {
         Command[] commands = Command.values();
         int random = (int) (Math.random() * commands.length);
         return new CommandCard(commands[random]);
     }
 
-    // XXX V2
+
+    /**
+     * Afslutter programmeringsfasen.
+     * Skjuler alle programmeringsfelter og gør det første programmeringsfelt synligt.
+     * Sætter spillets fase til ACTIVATION, nulstiller trintælleren og sætter den første spiller som aktuel spiller.
+     */
     public void finishProgrammingPhase() {
         makeProgramFieldsInvisible();
         makeProgramFieldsVisible(0);
@@ -112,8 +125,11 @@ public class GameController {
         board.setCurrentPlayer(board.getPlayer(0));
         board.setStep(0);
     }
-
-    // XXX V2
+    /**
+     * Gør programmeringsfeltet synligt for alle spillere for det angivne register.
+     *
+     * @param register indekset på det registerfelt, der skal gøres synligt; skal være mellem 0 og Player.NO_REGISTERS - 1
+     */
     private void makeProgramFieldsVisible(int register) {
         if (register >= 0 && register < Player.NO_REGISTERS) {
             for (int i = 0; i < board.getPlayersNumber(); i++) {
@@ -124,7 +140,10 @@ public class GameController {
         }
     }
 
-    // XXX V2
+
+    /**
+     * Skjuler alle programmeringsfelter for samtlige spillere.
+     */
     private void makeProgramFieldsInvisible() {
         for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player player = board.getPlayer(i);
@@ -135,26 +154,48 @@ public class GameController {
         }
     }
 
-    // XXX V2
+
+    /**
+     * Starter eksekveringen af spillernes programmer uden trinvis tilstand.
+     * Sætter stepMode til false og fortsætter eksekveringen af programmerne.
+     */
     public void executePrograms() {
         board.setStepMode(false);
         continuePrograms();
     }
 
-    // XXX V2
+
+    /**
+     * Udfører et enkelt trin i eksekveringen af spillernes programmer.
+     * Aktiverer trinvis tilstand (stepMode) og fortsætter derefter programmernes eksekvering.
+     */
     public void executeStep() {
         board.setStepMode(true);
         continuePrograms();
     }
 
-    // XXX V2
+
+    /**
+     * Fortsætter eksekveringen af spillernes programmer.
+     * Kalder løbende executeNextStep(), indtil fasen ikke længere er ACTIVATION,
+     * eller indtil stepMode aktiveres (trinvis tilstand).
+     */
     private void continuePrograms() {
         do {
             executeNextStep();
         } while (board.getPhase() == Phase.ACTIVATION && !board.isStepMode());
     }
 
-    // XXX V2
+    /**
+     * Eksekverer næste trin i spillernes programmeringssekvens.
+     * Henter den aktuelle spiller og udfører dennes kommando fra programfeltet.
+     * Metoden håndterer spillerskift, faseovergang og styrer rækkefølgen af spillerhandlinger.
+     * Hvis spillerinteraktion er påkrævet (f.eks. LEFT_OR_RIGHT-valg), afbrydes udførslen midlertidigt.
+     * Når alle spilleres kommandoer for det nuværende trin er udført, fortsættes til næste trin.
+     * Når alle trin er afsluttet, eksekveres feltaktioner, og en ny programmeringsfase starter.
+     *
+     * Metoden bør kun kaldes under ACTIVATION- eller INTERACTION_FINISHED-faserne.
+     */
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
 
@@ -174,59 +215,71 @@ public class GameController {
                     }
                 }
 
-                // **Vigtigt! Skift spiller korrekt**
+                // Skifter korrekt til næste spiller
                 int nextPlayerNumber = (board.getPlayerNumber(currentPlayer) + 1) % board.getPlayersNumber();
                 Player nextPlayer = board.getPlayer(nextPlayerNumber);
                 board.setCurrentPlayer(nextPlayer);
 
-                // **Vigtigt! Fortsæt rækkefølgen korrekt**
-                if (nextPlayerNumber == 0) { // Hvis vi har været igennem alle spillere
+                // Fortsætter korrekt til næste trin eller næste spiller
+                if (nextPlayerNumber == 0) { // Alle spillere har haft deres tur
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         board.setStep(step);
                         makeProgramFieldsVisible(step);
                     } else {
-                        // Hvis alle kort er brugt, afslut aktiveringsfasen og start en ny runde
+                        // Alle kort er brugt, afslut aktiveringsfasen og start ny runde
                         executeFieldActions();
                         startProgrammingPhase();
                         return;
                     }
                 }
 
-                // **Sikrer at den næste spiller får deres tur uden at fjerne noget**
+                // Sikrer, at næste spiller får sin tur
                 board.setPhase(Phase.ACTIVATION);
                 executeNextStep();
             } else {
-                // Dette bør aldrig ske
+                // Uventet trinindeks; bør aldrig ske
                 assert false;
             }
         } else {
-            // Dette bør aldrig ske
+            // Uventet fase eller null spiller; bør aldrig ske
             assert false;
         }
     }
 
 
+
+    /**
+     * Eksekverer feltaktioner for alle spillere.
+     * Gennemgår hver spillers aktuelle felt, henter alle tilknyttede feltaktioner og udfører dem.
+     */
     private void executeFieldActions() {
-        for(int i = 0; i < board.getPlayersNumber(); i++) {
+        for (int i = 0; i < board.getPlayersNumber(); i++) {
             Player currentPlayer = board.getPlayer(i);
             Space space = currentPlayer.getSpace();
             if (space != null) {
                 List<FieldAction> actions = space.getActions();
-                for(FieldAction action : actions ) {
-                    action.doAction(this , space);
+                for (FieldAction action : actions) {
+                    action.doAction(this, space);
                 }
             }
         }
     }
 
-    // XXX V2
+
+    /**
+     * Udfører den angivne kommando for den givne spiller.
+     *
+     * Håndterer spillerens bevægelse baseret på kommandotypen.
+     * Hvis kommandoen kræver spillerinteraktion (f.eks. LEFT_OR_RIGHT), sættes fasen til PLAYER_INTERACTION.
+     *
+     * Bemærk: Nuværende implementering er simpel og bør senere erstattes af en mere elegant løsning.
+     *
+     * @param player spilleren, som kommandoen skal udføres for; må ikke være null
+     * @param command den kommando, der skal udføres; må ikke være null
+     */
     private void executeCommand(@NotNull Player player, Command command) {
         if (player != null && player.board == board && command != null) {
-            // XXX This is a very simplistic way of dealing with some basic cards and
-            //     their execution. This should eventually be done in a more elegant way
-            //     (this concerns the way cards are modelled as well as the way they are executed).
-
             switch (command) {
                 case FORWARD:
                     this.moveForward(player);
@@ -247,13 +300,20 @@ public class GameController {
                     this.backwards(player);
                     break;
                 case LEFT_OR_RIGHT:
-                    board.setPhase(Phase.PLAYER_INTERACTION);// Beholder den rigtige spiller
+                    board.setPhase(Phase.PLAYER_INTERACTION); // Afventer spillerens valg
                     break;
                 default:
-
+                    // Ukendt kommando; gør ingenting
             }
         }
     }
+
+    /**
+     * Håndterer spillerens valg om at dreje til venstre under en spillerinteraktion.
+     * Udfører en venstredrejning for spilleren og afslutter spillerinteraktionen.
+     *
+     * @param player spilleren, som har valgt at dreje til venstre; må ikke være null
+     */
     public void playerChoseLeft(@NotNull Player player) {
         // Spilleren drejer til venstre
         turnLeft(player);
@@ -261,82 +321,102 @@ public class GameController {
         endPlayerInteraction(player);
     }
 
+
+    /**
+     * Håndterer spillerens valg om at dreje til højre under en spillerinteraktion.
+     * Udfører en højredrejning for spilleren og afslutter interaktionen.
+     *
+     * @param player spilleren, der har valgt at dreje til højre; må ikke være null
+     */
     public void playerChoseRight(@NotNull Player player) {
-        // Spilleren drejer til højre
         turnRight(player);
-
         endPlayerInteraction(player);
-
     }
 
+    /**
+     * Afslutter spillerinteraktion efter et spiller-valg (f.eks. drejning).
+     * Opdaterer fasen, skifter til næste spiller og fortsætter eksekveringen af spillet.
+     *
+     * @param player spilleren, som netop har afsluttet interaktionen
+     */
     private void endPlayerInteraction(Player player) {
         board.setPhase(Phase.INTERACTION_FINISHED);
 
-        int step = board.getStep(); // Hent nuværende step
+        int step = board.getStep();
         int currentPlayerIndex = board.getPlayerNumber(player);
         int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
         Player nextPlayer = board.getPlayer(nextPlayerIndex);
 
-        // **Sørg for, at vi ikke ændrer næste spillers program**
         board.setCurrentPlayer(nextPlayer);
 
-        // **Gå videre i kortsekvensen, men kun hvis alle spillere har haft tur**
-        if (nextPlayerIndex == 0) { // Hvis vi har været igennem alle spillere
+        if (nextPlayerIndex == 0) {
             step++;
             if (step < Player.NO_REGISTERS) {
                 board.setStep(step);
                 makeProgramFieldsVisible(step);
             } else {
-                // Hvis alle kort er brugt, afslut fasen og start en ny programmeringsfase
                 executeFieldActions();
                 startProgrammingPhase();
                 return;
             }
         }
 
-        // **Sikrer at spillet fortsætter normalt for næste spiller**
         board.setPhase(Phase.ACTIVATION);
         executeNextStep();
     }
 
-    // TODO V2
+    /**
+     * Flytter spilleren i den angivne retning. Hvis det næste felt er optaget, skubbes den anden spiller videre.
+     * Feltaktioner udføres efter en succesfuld flytning.
+     *
+     * @param player spilleren, der skal flyttes
+     * @param heading retningen spilleren flyttes i
+     */
     public void move(Player player, Heading heading) {
         Space currentSpace = player.getSpace();
         Space nextSpace = board.getNeighbour(currentSpace, heading);
 
         if (nextSpace != null) {
-            if (nextSpace.getPlayer() != null) { // Hvis en spiller allerede står der
-                move(nextSpace.getPlayer(), heading); // Skub den anden spiller videre i samme retning
+            if (nextSpace.getPlayer() != null) {
+                move(nextSpace.getPlayer(), heading);
             }
-            if (nextSpace.getPlayer() == null) { // Hvis feltet er ledigt efter skubning
+            if (nextSpace.getPlayer() == null) {
                 currentSpace.setPlayer(null);
                 nextSpace.setPlayer(player);
 
-                // **Tæl antal træk korrekt**
                 board.setCounter();
 
-                // **Tjek om der er en checkpoint-handling på dette felt**
                 for (FieldAction action : nextSpace.getActions()) {
-                    action.doAction(this, nextSpace); // Kald checkpoint-logikken
+                    action.doAction(this, nextSpace);
                 }
             }
         }
     }
 
-
-
+    /**
+     * Flytter spilleren ét felt fremad i den retning, spilleren aktuelt vender.
+     *
+     * @param player spilleren, der skal flyttes fremad; må ikke være null
+     */
     public void moveForward(@NotNull Player player) {
         move(player, player.getHeading());
     }
 
-    // TODO V2
+    /**
+     * Flytter spilleren to felter fremad i den retning, spilleren aktuelt vender.
+     *
+     * @param player spilleren, der skal flyttes hurtigt fremad; må ikke være null
+     */
     public void fastForward(@NotNull Player player) {
         moveForward(player);
         moveForward(player);
     }
 
-
-    // TODO V2
+    /**
+     * Drejer spilleren 90 grader mod højre, hvis der ikke er vægge, der forhindrer drejningen.
+     *
+     * @param player spilleren, som skal drejes; må ikke være null
+     */
     public void turnRight(@NotNull Player player) {
         Space currentSpace = player.getSpace();
         Heading newHeading = player.getHeading().next();
@@ -352,7 +432,11 @@ public class GameController {
         player.setHeading(newHeading);
     }
 
-    // TODO V2
+    /**
+     * Drejer spilleren 90 grader mod venstre, hvis der ikke er vægge, der forhindrer drejningen.
+     *
+     * @param player spilleren, som skal drejes; må ikke være null
+     */
     public void turnLeft(@NotNull Player player) {
         Space currentSpace = player.getSpace();
         Heading newHeading = player.getHeading().prev();
@@ -368,11 +452,21 @@ public class GameController {
         player.setHeading(newHeading);
     }
 
+    /**
+     * Drejer spilleren 180 grader (U-vending).
+     *
+     * @param player spilleren, som skal vende 180 grader; må ikke være null
+     */
     public void uTurn(@NotNull Player player) {
         turnRight(player);
         turnRight(player);
     }
 
+    /**
+     * Flytter spilleren ét felt bagud.
+     *
+     * @param player spilleren, som skal flyttes bagud; må ikke være null
+     */
     public void backwards(@NotNull Player player) {
         turnRight(player);
         turnRight(player);
@@ -381,8 +475,13 @@ public class GameController {
         turnRight(player);
     }
 
-
-
+    /**
+     * Flytter et kommandokort fra ét felt til et andet, hvis det nye felt er ledigt.
+     *
+     * @param source feltet, hvor kortet flyttes fra; må ikke være null
+     * @param target feltet, hvor kortet flyttes til; må ikke være null
+     * @return true, hvis flytningen lykkedes; false ellers
+     */
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
@@ -395,6 +494,11 @@ public class GameController {
         }
     }
 
+    /**
+     * Viser et popup-vindue med navnet på den vindende spiller.
+     *
+     * @param player spilleren, der har vundet spillet
+     */
     private void showWinnerPopup(Player player) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Spillet er slut!");
@@ -403,18 +507,28 @@ public class GameController {
         alert.showAndWait();
     }
 
+    /**
+     * Stopper spillet og nulstiller fasen til INITIALISATION.
+     */
     private void stopGame() {
-        board.setPhase(Phase.INITIALISATION); // Sæt spillet tilbage til start
+        board.setPhase(Phase.INITIALISATION);
     }
 
+    /**
+     * Tjekker om spilleren har nået alle checkpoints og dermed opfyldt vinderbetingelserne.
+     * Hvis spilleren har vundet, vises en popup, og spillet stoppes.
+     *
+     * @param player spilleren, der skal tjekkes for vinderbetingelser
+     */
     void checkWinCondition(Player player) {
-        int totalCheckpoints = 3; // Antal checkpoints i spillet
+        int totalCheckpoints = 3;
 
         if (player.getCheckpointCount() == totalCheckpoints) {
             showWinnerPopup(player);
             stopGame();
         }
     }
+
 
 
     /**
