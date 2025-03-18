@@ -31,22 +31,42 @@ import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
  */
 public class CommandCardField extends Subject {
 
+    /**
+     * Spilleren, som dette kommandokortfelt tilhører.
+     */
     final public Player player;
 
     private CommandCard card;
 
     private boolean visible;
 
+    /**
+     * Opretter et nyt kommandokortfelt for den angivne spiller.
+     * Standardindstillingen for synlighed er sat til true.
+     *
+     * @param player spilleren som feltet tilhører
+     */
     public CommandCardField(Player player) {
         this.player = player;
-        this. card = null;
+        this.card = null;
         this.visible = true;
     }
 
+    /**
+     * Henter det kommandokort, som er placeret i dette felt.
+     *
+     * @return det nuværende kommandokort, eller null hvis intet kort er til stede
+     */
     public CommandCard getCard() {
         return card;
     }
 
+    /**
+     * Placerer et nyt kommandokort i dette felt eller fjerner et kort ved at sætte det til null.
+     * Hvis kortet ændres, vil observere blive underrettet om ændringen.
+     *
+     * @param card det nye kommandokort, eller null for at fjerne kortet fra feltet
+     */
     public void setCard(CommandCard card) {
         if (card != this.card) {
             this.card = card;
@@ -54,10 +74,20 @@ public class CommandCardField extends Subject {
         }
     }
 
+    /**
+     * Returnerer om feltet er synligt.
+     *
+     * @return sand hvis feltet er synligt, ellers falsk
+     */
     public boolean isVisible() {
         return visible;
     }
 
+    /**
+     * Sætter synligheden af dette felt. Hvis synligheden ændres, vil observere blive underrettet.
+     *
+     * @param visible sand for at gøre feltet synligt, falsk for at gøre det usynligt
+     */
     public void setVisible(boolean visible) {
         if (visible != this.visible) {
             this.visible = visible;
