@@ -24,24 +24,29 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 import dk.dtu.compute.se.pisd.roborally.model.Space;
 
 /**
- * This is an abstract class for actions on spaces; since it implements some game logic,
- * it is located in the controller package. But, it is a model class at the same time,
- * since it represents also the game board.
+ * Abstrakt klasse for handlinger (actions) der kan udføres på felter (spaces) på spillebrættet.
+ *
+ * Da denne klasse implementerer spil-logik, er den placeret i controller-pakken.
+ * Dog fungerer den også som en modelklasse, da den repræsenterer elementer på brættet.
+ *
+ * FieldAction bruges som en superklasse for specifikke felthandlinger,
+ * såsom transportbånd (ConveyorBelt) og checkpoints (Checkpoint).
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 // XXX A3
 public abstract class FieldAction {
 
     /**
-     * The field action to be executed for a given space. In order to be able to do
-     * that the GameController associated with the game is passed to this method.
+     * Metode, der definerer en handling, som skal udføres på et felt.
      *
-     * @param gameController the gameController of the respective game
-     * @param space the space this action should be executed for
-     * @return whether the action was successfully executed
+     * Denne metode skal implementeres af alle underklasser (fx ConveyorBelt og Checkpoint).
+     * Den modtager GameController for at kunne interagere med spillets regler,
+     * og Space, som repræsenterer det felt, hvor handlingen sker.
+     *
+     * @param gameController Den GameController, der styrer spillets flow.
+     * @param space Det felt (Space), som handlingen udføres på.
+     * @return true, hvis handlingen blev udført succesfuldt, ellers false.
      */
     public abstract boolean doAction(GameController gameController, Space space);
-
 }
