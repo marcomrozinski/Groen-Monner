@@ -507,6 +507,7 @@ public class GameController {
         alert.showAndWait();
     }
 
+
     /**
      * Stopper spillet og nulstiller fasen til INITIALISATION.
      */
@@ -514,17 +515,27 @@ public class GameController {
         board.setPhase(Phase.INITIALISATION);
     }
 
+    private static Player winner = null;
+
+    public static Player getWinner() {
+        return winner;
+    }
+    public static void setWinner(Player winningPlayer) { // statisk setter
+        winner = winningPlayer;
+    }
     /**
      * Tjekker om spilleren har nået alle checkpoints og dermed opfyldt vinderbetingelserne.
      * Hvis spilleren har vundet, vises en popup, og spillet stoppes.
      *
      * @param player spilleren, der skal tjekkes for vinderbetingelser
      */
+
     void checkWinCondition(Player player) {
         int totalCheckpoints = 3;
 
         if (player.getCheckpointCount() == totalCheckpoints) {
             showWinnerPopup(player);
+            setWinner(player);
             stopGame();
         }
     }

@@ -23,6 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.model;
 
 import dk.dtu.compute.se.pisd.designpatterns.observer.Subject;
 import org.jetbrains.annotations.NotNull;
+import dk.dtu.compute.se.pisd.roborally.controller.GameController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -222,8 +223,10 @@ public class Board extends Subject {
 
         // TODO V1: add the move count to the status message
         // TODO V2: changed the status so that it shows the phase, the current player, and the current register
+        Player winner = GameController.getWinner(); // henter vinderen fra controlleren
+        String winnerName = (winner != null) ? winner.getName() : "Ingen endnu";
         return "Player = " + getCurrentPlayer().getName() + "| Total moves = " + getMoveCount()+"  Checkpoint Progress: "
-                + getCurrentPlayer().getCheckpointCount();
+                + getCurrentPlayer().getCheckpointCount() + " Winner: " + winnerName;
     }
 
     public void setCounter() {
