@@ -34,6 +34,15 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  * @author Ekkart Kindler, ekki@dtu.dk
  *
  */
+/**
+ * Klassen repræsenterer en spiller i RoboRally-spillet. Hver spiller har
+ * et navn, en farve, en position (space), en retning (heading) og et program (register)
+ * samt en liste over opnåede checkpoints.
+ *
+ * Klassen anvender observer-mønsteret, så ændringer i en spiller kan notificere
+ * andre objekter, der observerer spilleren.
+ */
+
 public class Player extends Subject {
 
     private List<Integer> reachedCheckpoint = new ArrayList<>();
@@ -74,10 +83,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Henter spillerens navn.
+     *
+     * @return Spillerens navn.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sætter spillerens navn og notifikér om ændringen.
+     *
+     * @param name Det nye navn for spilleren.
+     */
     public void setName(String name) {
         if (name != null && !name.equals(this.name)) {
             this.name = name;
@@ -88,10 +107,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Henter farven på spilleren.
+     *
+     * @return Spillerens farve.
+     */
     public String getColor() {
         return color;
     }
 
+    /**
+     * Ændrer farven på spilleren og notifikér om ændringen.
+     *
+     * @param color Den nye farve for spilleren.
+     */
     public void setColor(String color) {
         this.color = color;
         notifyChange();
@@ -100,10 +129,21 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Henter spillerens nuværende position (space) på brættet.
+     *
+     * @return Spilleren nuværende placering (Space).
+     */
     public Space getSpace() {
         return space;
     }
 
+    /**
+     * Sætter spillerens position på brættet, og opdaterer både den gamle
+     * og den nye position.
+     *
+     * @param space Den nye position for spilleren.
+     */
     public void setSpace(Space space) {
         Space oldSpace = this.space;
         if (space != oldSpace &&
@@ -119,10 +159,20 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Henter spillerens nuværende retning.
+     *
+     * @return Spillerens retning (Heading).
+     */
     public Heading getHeading() {
         return heading;
     }
 
+    /**
+     * Sætter spillerens retning og notifikér om ændringen.
+     *
+     * @param heading Den nye retning for spilleren.
+     */
     public void setHeading(@NotNull Heading heading) {
         if (heading != this.heading) {
             this.heading = heading;
@@ -133,14 +183,31 @@ public class Player extends Subject {
         }
     }
 
+    /**
+     * Henter et programfelt for spilleren.
+     *
+     * @param i Indekset for det ønskede programfelt.
+     * @return Programfeltet ved det angivne indeks.
+     */
     public CommandCardField getProgramField(int i) {
         return program[i];
     }
 
+    /**
+     * Henter et kortfelt for spilleren.
+     *
+     * @param i Indekset for det ønskede kortfelt.
+     * @return Kortfeltet ved det angivne indeks.
+     */
     public CommandCardField getCardField(int i) {
         return cards[i];
     }
 
+    /**
+     * Henter antallet af checkpoints, som spilleren har opnået.
+     *
+     * @return Antallet af nåede checkpoints.
+     */
     public int getCheckpointCount() {
         return reachedCheckpoint.size();
     }
