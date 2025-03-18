@@ -57,22 +57,22 @@ public class BoardFactory {
         // add some walls, actions and checkpoints to some spaces
         Space space = simple.getSpace(4,3);
         space.getWalls().add(Heading.SOUTH);
-        ConveyorBelt action  = new ConveyorBelt(Heading.EAST, 2);
+        ConveyorBelt action  = new ConveyorBelt(Heading.EAST);
         space.getActions().add(action);
 
 
         space = simple.getSpace(5,2);
         space.getWalls().add(Heading.NORTH);
-        action  = new ConveyorBelt(Heading.SOUTH, 1);
+        action  = new ConveyorBelt(Heading.SOUTH);
         space.getActions().add(action);
 
         space = simple.getSpace(2,4);
         space.getWalls().add(Heading.SOUTH);
-        action  = new ConveyorBelt(Heading.WEST, 1);
+        action  = new ConveyorBelt(Heading.WEST);
         space.getActions().add(action);
 
         space = simple.getSpace(6,5);
-        action  = new ConveyorBelt(Heading.NORTH, 2);
+        action  = new ConveyorBelt(Heading.NORTH);
         space.getActions().add(action);
 
         space = simple.getSpace(1,2);
@@ -95,24 +95,24 @@ public class BoardFactory {
 
         Space space = advanced.getSpace(4,0);
         space.getWalls().add(Heading.NORTH);
-        ConveyorBelt action  = new ConveyorBelt(Heading.EAST, 2);
+        ConveyorBelt action  = new ConveyorBelt(Heading.EAST);
         space.getActions().add(action);
 
 
         space = advanced.getSpace(1,3);
         space.getWalls().add(Heading.WEST);
-        action  = new ConveyorBelt(Heading.NORTH, 2);
+        action  = new ConveyorBelt(Heading.NORTH);
         space.getActions().add(action);
 
         space = advanced.getSpace(6,5);
         space.getWalls().add(Heading.SOUTH);
-        action  = new ConveyorBelt(Heading.WEST, 1);
+        action  = new ConveyorBelt(Heading.WEST);
         space.getActions().add(action);
 
 
         space = advanced.getSpace(8,2);
         space.getWalls().add(Heading.SOUTH);
-        action  = new ConveyorBelt(Heading.NORTH, 2);
+        action  = new ConveyorBelt(Heading.NORTH);
         space.getActions().add(action);
 
         space = advanced.getSpace(9,6);
@@ -121,28 +121,28 @@ public class BoardFactory {
 
         space = advanced.getSpace(9,3);
         space.getWalls().add(Heading.WEST);
-        action  = new ConveyorBelt(Heading.EAST, 1);
+        action  = new ConveyorBelt(Heading.EAST);
         space.getActions().add(action);
 
         space = advanced.getSpace(11,3);
         space.getWalls().add(Heading.EAST);
-        action  = new ConveyorBelt(Heading.SOUTH, 1);
+        action  = new ConveyorBelt(Heading.SOUTH);
         space.getActions().add(action);
 
 
         space = advanced.getSpace(13,6);
         space.getWalls().add(Heading.EAST);
-        action  = new ConveyorBelt(Heading.SOUTH, 1);
+        action  = new ConveyorBelt(Heading.SOUTH);
         space.getActions().add(action);
 
         space = advanced.getSpace(14,2);
         space.getWalls().add(Heading.EAST);
-        action  = new ConveyorBelt(Heading.NORTH, 1);
+        action  = new ConveyorBelt(Heading.NORTH);
         space.getActions().add(action);
 
         space = advanced.getSpace(15,1);
         space.getWalls().add(Heading.NORTH);
-        action  = new ConveyorBelt(Heading.WEST, 2);
+        action  = new ConveyorBelt(Heading.WEST);
         space.getActions().add(action);
 
         space = advanced.getSpace(1,2);

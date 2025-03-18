@@ -23,7 +23,7 @@ package dk.dtu.compute.se.pisd.roborally.controller;
 
 import dk.dtu.compute.se.pisd.roborally.model.*;
 import org.jetbrains.annotations.NotNull;
-
+import javafx.scene.control.Alert;
 import java.util.List;
 
 /**
@@ -228,6 +228,7 @@ public class GameController {
                 case BACKWARD:
                     this.backwards(player);
                     break;
+                case LEFT_OR_RIGHT:
                 default:
                     // DO NOTHING (for now)
             }
@@ -323,6 +324,8 @@ public class GameController {
         turnRight(player);
     }
 
+
+
     public boolean moveCards(@NotNull CommandCardField source, @NotNull CommandCardField target) {
         CommandCard sourceCard = source.getCard();
         CommandCard targetCard = target.getCard();
@@ -334,6 +337,30 @@ public class GameController {
             return false;
         }
     }
+
+    private void showWinnerPopup(Player player) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Spillet er slut!");
+        alert.setHeaderText(null);
+        alert.setContentText("Vinderen er: " + player.getName() + "!");
+        alert.showAndWait();
+    }
+
+    private void stopGame() {
+        board.setPhase(Phase.INITIALISATION); // Sæt spillet tilbage til start
+        System.out.println("Spillet er nu slut!");
+    }
+
+    void checkWinCondition(Player player) {
+        int totalCheckpoints = 3; // Antal checkpoints i spillet
+
+        if (player.getCheckpointCount() == totalCheckpoints) {
+            System.out.println("Spiller " + player.getName() + " har vundet!");
+            showWinnerPopup(player);
+            stopGame();
+        }
+    }
+
 
     /**
      * A method called when no corresponding controller operation is implemented yet.
