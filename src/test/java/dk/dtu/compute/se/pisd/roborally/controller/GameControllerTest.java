@@ -128,9 +128,9 @@ class GameControllerTest {
         boolean actionTriggered = checkpoint.doAction(gameController, checkpointSpace);
 
 
-        Assertions.assertFalse(actionTriggered, "Player should not activate checkpoint 2 without reaching checkpoint 1.");
+        Assertions.assertFalse(actionTriggered, "Player should not activate checkpoint 2 without reaching checkpoint 1");
         Assertions.assertFalse(player.getReachedCheckpoint().contains(2),
-                "Player should not have checkpoint 2 in the list.");
+                "Player should not have checkpoint 2 in the list");
     }
 
     @Test
@@ -142,7 +142,7 @@ class GameControllerTest {
         int actualCheckpointID = checkpoint.getCheckpoint();
 
         Assertions.assertEquals(expectedCheckpointID, actualCheckpointID,
-                "getCheckpoint() should return the correct checkpoint ID.");
+                "getCheckpoint() should return the correct checkpoint ID");
     }
 
     @Test
@@ -163,12 +163,12 @@ class GameControllerTest {
         boolean moved = conveyorBelt.doAction(gameController, conveyorSpace);
 
 
-        Assertions.assertTrue(moved, "The conveyor belt should have moved the player.");
+        Assertions.assertTrue(moved, "The conveyor belt should have moved the player");
         Assertions.assertEquals(targetSpace, player.getSpace(),
-                "Player should have been moved to the correct target space by the conveyor belt.");
-        Assertions.assertNull(conveyorSpace.getPlayer(), "Conveyor space should no longer have a player.");
+                "Player should have been moved to the correct target space by the conveyor belt");
+        Assertions.assertNull(conveyorSpace.getPlayer(), "Conveyor space should no longer have a player");
         Assertions.assertEquals(player, targetSpace.getPlayer(),
-                "Target space should now contain the player.");
+                "Target space should now contain the player");
     }
 
     @Test
@@ -180,7 +180,7 @@ class GameControllerTest {
         Heading actualHeading = conveyorBelt.getHeading();
 
         Assertions.assertEquals(expectedHeading, actualHeading,
-                "Metoden getHeading() skal returnere den korrekte retning.");
+                "Metoden getHeading() skal returnere den korrekte retning");
     }
 
     @Test
@@ -198,17 +198,17 @@ class GameControllerTest {
 
         if (secondMove != null) {
             Assertions.assertEquals(secondMove, currentPlayer.getSpace(),
-                    "Player should move two spaces forward with fast forward.");
+                    "Player should move two spaces forward with fast forward");
         } else if (firstMove != null) {
             Assertions.assertEquals(firstMove, currentPlayer.getSpace(),
-                    "Player should move only one space forward as the second move is invalid.");
+                    "Player should move only one space forward as the second move is invalid");
         } else {
             Assertions.assertEquals(initialSpace, currentPlayer.getSpace(),
-                    "Player should not move as both moves are invalid.");
+                    "Player should not move as both moves are invalid");
         }
 
         Assertions.assertEquals(Heading.NORTH, currentPlayer.getHeading(),
-                "Player's heading should remain unchanged after fast forward.");
+                "Player's heading should remain unchanged after fast forward");
     }
 
 
@@ -221,7 +221,7 @@ class GameControllerTest {
         gameController.turnRight(currentPlayer);
 
         Assertions.assertEquals(Heading.EAST, currentPlayer.getHeading(),
-                "Player's heading should change to EAST after turning right.");
+                "Player's heading should change to EAST after turning right");
     }
 
     @Test
@@ -233,7 +233,7 @@ class GameControllerTest {
         gameController.turnLeft(currentPlayer);
 
         Assertions.assertEquals(Heading.WEST, currentPlayer.getHeading(),
-                "Player's heading should change to WEST after turning left.");
+                "Player's heading should change to WEST after turning left");
     }
 
     @Test
@@ -245,7 +245,7 @@ class GameControllerTest {
         gameController.uTurn(currentPlayer);
 
         Assertions.assertEquals(Heading.SOUTH, currentPlayer.getHeading(),
-                "Player's heading should be SOUTH after making a U-turn.");
+                "Player's heading should be SOUTH after making a U-turn");
     }
 
     @Test
@@ -260,9 +260,9 @@ class GameControllerTest {
 
         Space expectedSpaceBackwards = board.getNeighbour(initialSpace, Heading.SOUTH);
         Assertions.assertEquals(expectedSpaceBackwards, currentPlayer.getSpace(),
-                "Player should move backwards to the SOUTH.");
+                "Player should move backwards to the SOUTH");
         Assertions.assertEquals(Heading.NORTH, currentPlayer.getHeading(),
-                "Player's heading should remain NORTH after moving backwards.");
+                "Player's heading should remain NORTH after moving backwards");
     }
 
     @Test
@@ -275,7 +275,55 @@ class GameControllerTest {
         gameController.moveForward(currentPlayer);
 
         Assertions.assertEquals(board.getSpace(0, 0), currentPlayer.getSpace(),
-                "Player should not move outside the boundaries of the board.");
+                "Player should not move outside the boundaries of the board");
+    }
+    @Test
+    void testPlayerChoseRight() {
+
+        Board board = gameController.board;
+        Player currentPlayer = board.getPlayer(0);
+        Assertions.assertNotNull(currentPlayer, "Current player should not be null");
+        currentPlayer.setHeading(Heading.NORTH);
+
+        gameController.playerChoseRight(currentPlayer);
+        Assertions.assertEquals(Heading.EAST, currentPlayer.getHeading(),
+                "Player should face EAST after choosing right from NORTH");
+
+        gameController.playerChoseRight(currentPlayer);
+        Assertions.assertEquals(Heading.SOUTH, currentPlayer.getHeading(),
+                "Player should face SOUTH after choosing right from EAST");
+
+        gameController.playerChoseRight(currentPlayer);
+        Assertions.assertEquals(Heading.WEST, currentPlayer.getHeading(),
+                "Player should face WEST after choosing right from SOUTH");
+
+        gameController.playerChoseRight(currentPlayer);
+        Assertions.assertEquals(Heading.NORTH, currentPlayer.getHeading(),
+                "Player should face NORTH after choosing right from WEST");
+    }
+
+    @Test
+    void testPlayerChoseLeft() {
+        Board board = gameController.board;
+        Player currentPlayer = board.getPlayer(0);
+        Assertions.assertNotNull(currentPlayer, "Current player should not be null");
+        currentPlayer.setHeading(Heading.NORTH);
+
+        gameController.playerChoseLeft(currentPlayer);
+        Assertions.assertEquals(Heading.WEST, currentPlayer.getHeading(),
+                "Player should face WEST after choosing left from NORTH");
+
+        gameController.playerChoseLeft(currentPlayer);
+        Assertions.assertEquals(Heading.SOUTH, currentPlayer.getHeading(),
+                "Player should face SOUTH after choosing left from WEST");
+
+        gameController.playerChoseLeft(currentPlayer);
+        Assertions.assertEquals(Heading.EAST, currentPlayer.getHeading(),
+                "Player should face EAST after choosing left from SOUTH");
+
+        gameController.playerChoseLeft(currentPlayer);
+        Assertions.assertEquals(Heading.NORTH, currentPlayer.getHeading(),
+                "Player should face NORTH after choosing left from EAST");
     }
 }
 
