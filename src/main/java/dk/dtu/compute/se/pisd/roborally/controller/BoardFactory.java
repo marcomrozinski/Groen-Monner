@@ -34,7 +34,7 @@ public class BoardFactory {
      */
     public static BoardFactory getInstance() {
         if (instance == null) {
-            instance = new BoardFactory(); // Lazy instantiation
+            instance = new BoardFactory();
         }
         return instance;
     }
@@ -46,13 +46,13 @@ public class BoardFactory {
      * @return Et Board-objekt med den valgte type.
      */
     public Board createBoard(String name) {
-        Board board = new Board(8, 8, name); // Standard 8x8 bræt
+        Board board = new Board(8, 8, name);
 
         if ("advanced".equalsIgnoreCase(name)) {
-            board = createAdvancedBoard(); // Opret avanceret bræt
+            board = createAdvancedBoard();
         }
         if ("simple".equalsIgnoreCase(name)) {
-            board = createSimpleBoard(); // Opret simpelt bræt
+            board = createSimpleBoard();
         }
         return board;
     }
@@ -65,7 +65,6 @@ public class BoardFactory {
     public Board createSimpleBoard() {
         Board simple = new Board(8,8, "Simple board");
 
-        // Tilføjer vægge og handlinger (transportbånd) til brættet
         Space space = simple.getSpace(4,3);
         space.getWalls().add(Heading.SOUTH);
         ConveyorBelt action  = new ConveyorBelt(Heading.EAST);
@@ -85,7 +84,6 @@ public class BoardFactory {
         action  = new ConveyorBelt(Heading.NORTH);
         space.getActions().add(action);
 
-        // Tilføjer checkpoints på brættet
         space = simple.getSpace(1,2);
         Checkpoint checkpoint = new Checkpoint(1);
         space.getActions().add(checkpoint);
@@ -109,7 +107,6 @@ public class BoardFactory {
     public Board createAdvancedBoard() {
         Board advanced = new Board(16, 8, "Advanced board");
 
-        // Tilføjer vægge og transportbånd på forskellige positioner
         Space space = advanced.getSpace(4,0);
         space.getWalls().add(Heading.NORTH);
         ConveyorBelt action  = new ConveyorBelt(Heading.EAST);

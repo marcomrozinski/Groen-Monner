@@ -205,13 +205,11 @@ public class PlayerView extends Tab implements ViewObserver {
                 playerInteractionPanel.getChildren().clear();
 
                 if (player.board.getCurrentPlayer() == player) {
-                    // Tilføj Left-knap
                     Button leftButton = new Button("Left");
                     leftButton.setOnAction(e -> gameController.playerChoseLeft(player));
                     leftButton.setDisable(false);
                     playerInteractionPanel.getChildren().add(leftButton);
 
-                    // Tilføj Right-knap
                     Button rightButton = new Button("Right");
                     rightButton.setOnAction(e -> gameController.playerChoseRight(player));
                     rightButton.setDisable(false);
