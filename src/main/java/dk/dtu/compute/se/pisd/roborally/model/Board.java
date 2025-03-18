@@ -215,25 +215,39 @@ public class Board extends Subject {
         return neighbour;
     }
 
+    /**
+     * Laver en status meddelse
+     * Meddelelsen indeholder:
+     * - Navnet på den nuværende spiller
+     * - Det samlede antal træk foretaget i spillet
+     * - Antallet af checkpoints, den nuværende spiller har nået
+     * - Vinderen af spillet (hvis der er en)
+     * </p>
+     *
+     * @return En formatteret streng, der indeholder spillets status.
+     */
 
     public String getStatusMessage() {
-        // this is actually a view aspect, but for making assignment V1 easy for
-        // the students, this method gives a string representation of the current
-        // status of the game
-
-        // TODO V1: add the move count to the status message
-        // TODO V2: changed the status so that it shows the phase, the current player, and the current register
         Player winner = GameController.getWinner(); // henter vinderen fra controlleren
         String winnerName = (winner != null) ? winner.getName() : "Ingen endnu";
         return "Player = " + getCurrentPlayer().getName() + "| Total moves = " + getMoveCount()+"  Checkpoint Progress: "
                 + getCurrentPlayer().getCheckpointCount() + " Winner: " + winnerName;
     }
 
+    /**
+     * Øger tælleren for antallet af træk i spillet med en og underretter systemet om ændringen.
+     * </p>
+     */
     public void setCounter() {
         moveCount++;
         notifyChange();
     }
 
+    /**
+     * Beregner og returnerer det gennemsnitlige antal træk pr. spiller.
+     * <p>
+     * @return Det faktiske antal træk pr. spiller i spillet.
+     */
     public int getMoveCount() {
         int playerCount = getPlayersNumber();
         int actualMoves = playerCount > 0 ? moveCount / playerCount : moveCount;
