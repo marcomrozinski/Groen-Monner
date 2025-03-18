@@ -28,40 +28,58 @@ import dk.dtu.compute.se.pisd.roborally.model.Space;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This class represents a conveyor belt on a space.
+ * Repræsenterer et transportbånd på et felt (Space) i RoboRally-spillet.
+ * Når en spiller lander på et felt med et transportbånd, bliver spilleren flyttet i en bestemt retning.
  *
  * @author Ekkart Kindler, ekki@dtu.dk
- *
  */
 // XXX A3
 public class ConveyorBelt extends FieldAction {
 
-    private Heading heading;
+    private Heading heading; // Transportbåndets retning (NORD, SYD, ØST, VEST)
 
-    // KONSTRUKTOR: Sørger for at vi kan angive heading
+    /**
+     * Konstruktor til at oprette et transportbånd med en given retning.
+     *
+     * @param heading Den retning, transportbåndet bevæger spilleren i.
+     */
     public ConveyorBelt(Heading heading) {
         this.heading = heading;
     }
 
+    /**
+     * Henter transportbåndets retning.
+     *
+     * @return Transportbåndets heading (NORD, SYD, ØST, VEST).
+     */
     public Heading getHeading() {
         return heading;
     }
 
-
     /**
-     * Implementation of the action of a conveyor belt. Needs to be implemented for A3.
+     * Udfører handlingen, når en spiller lander på transportbåndet.
+     * Spilleren flyttes automatisk i transportbåndets retning.
+     *
+     * @param gameController Referencen til spilcontrolleren.
+     * @param space Rummet (feltet) hvor spilleren står.
+     * @return true, hvis spilleren blev flyttet, ellers false.
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
+        // Hvis der ikke er en spiller på feltet, eller heading ikke er sat, gør vi ingenting
         if (space.getPlayer() == null || heading == null) {
             return false;
         }
 
+        // Hent spillebrættet og spilleren på feltet
         Board board = space.board;
         Player player = space.getPlayer();
+
+        // Flyt spilleren i transportbåndets retning
         gameController.move(player, heading);
 
-        return true;
+        return true; // Handling udført succesfuldt
     }
 }
+
 

@@ -6,35 +6,61 @@ import dk.dtu.compute.se.pisd.roborally.model.Player;
 import dk.dtu.compute.se.pisd.roborally.model.Board;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Repræsenterer et checkpoint på spillebrættet i RoboRally.
+ * Når en spiller rammer et checkpoint, gemmes det, og det tjekkes, om spilleren har vundet.
+ */
 public class Checkpoint extends FieldAction {
-    private final int checkpointID;
 
-    public Checkpoint(int checkpointID) { // Constructor til at definere checkpoint
+    private final int checkpointID; // Unikt ID for hvert checkpoint
+
+    /**
+     * Konstruktor til at oprette et checkpoint med et specifikt ID.
+     *
+     * @param checkpointID Det ID, som dette checkpoint får.
+     */
+    public Checkpoint(int checkpointID) {
         this.checkpointID = checkpointID;
     }
 
-    public int getCheckpoint() { //Gemmer checkpoint ID for det respektive checkpoint
+    /**
+     * Returnerer checkpointets ID.
+     *
+     * @return ID for dette checkpoint.
+     */
+    public int getCheckpoint() {
         return checkpointID;
-
     }
 
+    /**
+     * Udfører handlingen, når en spiller lander på et checkpoint.
+     *
+     * @param gameController Referencen til spilcontrolleren.
+     * @param space Rummet (feltet) hvor spilleren står.
+     * @return true, hvis spilleren registrerede et nyt checkpoint, ellers false.
+     */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        Player player = space.getPlayer();
-        if (player != null) {
-            if (checkpointID == 1 || player.getReachedCheckpoint().contains(checkpointID - 1)) {
-                if (!player.getReachedCheckpoint().contains(checkpointID)) {
-                    player.getReachedCheckpoint().add(checkpointID);
+        Player player = space.getPlayer(); // Henter spilleren, hvis der er en på dette felt
 
-                    // Tjek om spilleren har vundet
+        if (player != null) { // Tjekker om en spiller er på checkpointet
+            // Spilleren kan kun aktivere dette checkpoint, hvis:
+            // - Det er det første checkpoint (ID == 1)
+            // - Spilleren allerede har nået det forrige checkpoint (checkpointID - 1)
+            if (checkpointID == 1 || player.getReachedCheckpoint().contains(checkpointID - 1)) {
+
+                // Spilleren kan kun registrere checkpointet, hvis det ikke allerede er nået
+                if (!player.getReachedCheckpoint().contains(checkpointID)) {
+                    player.getReachedCheckpoint().add(checkpointID); // Tilføjer checkpoint til spillerens liste
+
+                    // Tjekker om spilleren har vundet spillet ved at nå det sidste checkpoint
                     gameController.checkWinCondition(player);
 
-                    return true;
+                    return true; // Handling udført succesfuldt
                 }
             }
         }
-        return false;
+        return false; // Spilleren kunne ikke aktivere checkpointet
     }
-
-
 }
+
