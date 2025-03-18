@@ -520,12 +520,27 @@ public class GameController {
         board.setPhase(Phase.INITIALISATION);
     }
 
+    /**
+     * Holder styr på den spiller, der har vundet spillet.
+     * Er null indtil en spiller har vundet.
+     */
     private static Player winner = null;
 
+    /**
+     * Returnerer spilleren, der har vundet spillet.
+     *
+     * @return vinderen af spillet, eller null hvis ingen endnu har vundet
+     */
     public static Player getWinner() {
         return winner;
     }
-    public static void setWinner(Player winningPlayer) { // statisk setter
+
+    /**
+     * Angiver hvilken spiller der har vundet spillet.
+     *
+     * @param winningPlayer spilleren der har vundet spillet
+     */
+    public static void setWinner(Player winningPlayer) {
         winner = winningPlayer;
     }
     /**
@@ -552,7 +567,7 @@ public class GameController {
      * This should eventually be removed.
      */
     public void notImplemented() {
-        // XXX just for now to indicate that the actual method is not yet implemented
+
         assert false;
     }
 }
