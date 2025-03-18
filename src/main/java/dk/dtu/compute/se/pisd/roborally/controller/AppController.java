@@ -44,19 +44,14 @@ import java.util.Optional;
  */
 public class AppController implements Observer {
 
-    // Liste over mulige antal spillere (2-6)
     final private List<Integer> PLAYER_NUMBER_OPTIONS = Arrays.asList(2, 3, 4, 5, 6);
 
-    // Liste over farver, der bruges til at tildele spillere
     final private List<String> PLAYER_COLORS = Arrays.asList("red", "green", "blue", "orange", "grey", "magenta");
 
-    // Liste over de tilgængelige bræt-typer
     final private List<String> boardChoices = Arrays.asList("simple", "advanced");
 
-    // Reference til RoboRally applikationen, som UI opdateres fra
     final private RoboRally roboRally;
 
-    // Reference til GameController, som håndterer selve spillet
     private GameController gameController;
 
     /**
@@ -72,51 +67,41 @@ public class AppController implements Observer {
      * Starter et nyt spil.
      */
     public void newGame() {
-        // 1. Brugeren vælger antal spillere via en dialogboks
         ChoiceDialog<Integer> dialog = new ChoiceDialog<>(PLAYER_NUMBER_OPTIONS.get(0), PLAYER_NUMBER_OPTIONS);
         dialog.setTitle("Player number");
         dialog.setHeaderText("Select number of players");
         Optional<Integer> result = dialog.showAndWait();
 
-        // Hvis brugeren valgte et antal spillere
         if (result.isPresent()) {
-            // 2. Hvis der allerede er et spil i gang, spørg om det skal stoppes
             if (gameController != null) {
                 if (!stopGame()) {
-                    return; // Hvis brugeren vælger ikke at stoppe, afbryd processen
+                    return;
                 }
             }
 
-            // 3. Brugeren vælger bræt-type (simple eller advanced)
             ChoiceDialog<String> boardDialog = new ChoiceDialog<>("simple", boardChoices);
             boardDialog.setTitle("Board Selection");
             boardDialog.setHeaderText("Select board type");
             Optional<String> boardResult = boardDialog.showAndWait();
 
-            // Hvis brugeren annullerer, afbryd processen
             if (!boardResult.isPresent()) return;
 
-            String boardType = boardResult.get(); // Hent brugerens valg af bræt
+            String boardType = boardResult.get();
 
-            // 4. Opret brættet via BoardFactory
             BoardFactory factory = BoardFactory.getInstance();
             Board board = factory.createBoard(boardType);
 
-            // 5. Opret GameController med det nye bræt
             gameController = new GameController(board);
-            int no = result.get(); // Hent antal spillere
+            int no = result.get();
 
-            // 6. Opret og tilføj spillere til brættet
             for (int i = 0; i < no; i++) {
                 Player player = new Player(board, PLAYER_COLORS.get(i), "Player " + (i + 1));
                 board.addPlayer(player);
-                player.setSpace(board.getSpace(i % board.width, i)); // Spillere starter på forskellige felter
+                player.setSpace(board.getSpace(i % board.width, i));
             }
 
-            // 7. Start programmeringsfasen
             gameController.startProgrammingPhase();
 
-            // 8. Opdater UI med det nye bræt
             roboRally.createBoardView(gameController);
         }
     }
@@ -146,37 +131,31 @@ public class AppController implements Observer {
      */
     public boolean stopGame() {
         if (gameController != null) {
-            // Gem spillet, hvis nødvendigt
             saveGame();
 
-            // Nulstil gameController for at stoppe spillet
             gameController = null;
 
-            // Opdater UI ved at fjerne brættet
             roboRally.createBoardView(null);
             return true;
         }
-        return false; // Returner false, hvis der ikke var noget spil at stoppe
+        return false;
     }
 
     /**
      * Afslutter applikationen, men giver mulighed for at stoppe det nuværende spil først.
      */
     public void exit() {
-        // Hvis der er et igangværende spil, spørg brugeren om bekræftelse
         if (gameController != null) {
             Alert alert = new Alert(AlertType.CONFIRMATION);
             alert.setTitle("Exit RoboRally?");
             alert.setContentText("Are you sure you want to exit RoboRally?");
             Optional<ButtonType> result = alert.showAndWait();
 
-            // Hvis brugeren ikke bekræfter, afbryd exit
             if (!result.isPresent() || result.get() != ButtonType.OK) {
                 return;
             }
         }
 
-        // Hvis intet spil kører, eller spillet stoppes succesfuldt, luk applikationen
         if (gameController == null || stopGame()) {
             Platform.exit();
         }

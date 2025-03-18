@@ -36,7 +36,7 @@ import org.jetbrains.annotations.NotNull;
 // XXX A3
 public class ConveyorBelt extends FieldAction {
 
-    private Heading heading; // Transportbåndets retning (NORD, SYD, ØST, VEST)
+    private Heading heading;
 
     /**
      * Konstruktor til at oprette et transportbånd med en given retning.
@@ -66,19 +66,16 @@ public class ConveyorBelt extends FieldAction {
      */
     @Override
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
-        // Hvis der ikke er en spiller på feltet, eller heading ikke er sat, gør vi ingenting
         if (space.getPlayer() == null || heading == null) {
             return false;
         }
 
-        // Hent spillebrættet og spilleren på feltet
         Board board = space.board;
         Player player = space.getPlayer();
 
-        // Flyt spilleren i transportbåndets retning
         gameController.move(player, heading);
 
-        return true; // Handling udført succesfuldt
+        return true;
     }
 }
 

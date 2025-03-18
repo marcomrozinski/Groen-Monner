@@ -188,7 +188,7 @@ public class Board extends Subject {
         int y = space.y;
 
         if (space.getWalls().contains(heading)) {
-            return null; // Der er en væg, så vi kan ikke bevæge os i den retning.
+            return null;
         }
 
         Space neighbour = null;

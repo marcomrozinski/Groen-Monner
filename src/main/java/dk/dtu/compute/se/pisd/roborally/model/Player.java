@@ -36,7 +36,7 @@ import static dk.dtu.compute.se.pisd.roborally.model.Heading.SOUTH;
  */
 public class Player extends Subject {
 
-    private List<Integer> reachedCheckpoint = new ArrayList<>(); // List af hvilke checkpoints hver spiller har
+    private List<Integer> reachedCheckpoint = new ArrayList<>();
 
     public List<Integer> getReachedCheckpoint() { // Returnerer checkpoint listen
         return reachedCheckpoint;
