@@ -43,17 +43,15 @@ public class Checkpoint extends FieldAction {
     public boolean doAction(@NotNull GameController gameController, @NotNull Space space) {
         Player player = space.getPlayer(); // Henter spilleren, hvis der er en på dette felt
 
-        if (player != null) { // Tjekker om en spiller er på checkpointet
-            // Spilleren kan kun aktivere dette checkpoint, hvis:
-            // - Det er det første checkpoint (ID == 1)
-            // - Spilleren allerede har nået det forrige checkpoint (checkpointID - 1)
+        if (player != null) {
+            // Spilleren kan kun aktivere dette checkpoint, hvis det er det første
+            // eller hvis spilleren allerede har det forrige checkpoint
             if (checkpointID == 1 || player.getReachedCheckpoint().contains(checkpointID - 1)) {
 
                 // Spilleren kan kun registrere checkpointet, hvis det ikke allerede er nået
                 if (!player.getReachedCheckpoint().contains(checkpointID)) {
                     player.getReachedCheckpoint().add(checkpointID); // Tilføjer checkpoint til spillerens liste
-
-                    // Tjekker om spilleren har vundet spillet ved at nå det sidste checkpoint
+                    // **Tjek, om spilleren har vundet spillet**
                     gameController.checkWinCondition(player);
 
                     return true; // Handling udført succesfuldt
@@ -62,5 +60,6 @@ public class Checkpoint extends FieldAction {
         }
         return false; // Spilleren kunne ikke aktivere checkpointet
     }
+
 }
 

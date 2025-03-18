@@ -157,43 +157,55 @@ public class GameController {
     // XXX V2
     private void executeNextStep() {
         Player currentPlayer = board.getCurrentPlayer();
-        if ((board.getPhase() == Phase.ACTIVATION || board.getPhase() == Phase.INTERACTION_FINISHED ) && currentPlayer != null) {
+
+        if ((board.getPhase() == Phase.ACTIVATION || board.getPhase() == Phase.INTERACTION_FINISHED) && currentPlayer != null) {
             int step = board.getStep();
+
             if (step >= 0 && step < Player.NO_REGISTERS) {
                 CommandCard card = currentPlayer.getProgramField(step).getCard();
+
                 if (card != null) {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
-                    if (board.getPhase() != Phase.ACTIVATION) {
+
+                    // Hvis vi er i interaktionsfasen (LEFT_OR_RIGHT), vent på spillerens valg
+                    if (board.getPhase() == Phase.PLAYER_INTERACTION) {
                         return;
                     }
-                    if(board.getPhase()== Phase.INTERACTION_FINISHED) {
-                        board.setPhase(Phase.ACTIVATION);
-                    }
                 }
-                int nextPlayerNumber = board.getPlayerNumber(currentPlayer) + 1;
-                if (nextPlayerNumber < board.getPlayersNumber()) {
-                    board.setCurrentPlayer(board.getPlayer(nextPlayerNumber));
-                } else {
-                    executeFieldActions();
+
+                // **Vigtigt! Skift spiller korrekt**
+                int nextPlayerNumber = (board.getPlayerNumber(currentPlayer) + 1) % board.getPlayersNumber();
+                Player nextPlayer = board.getPlayer(nextPlayerNumber);
+                board.setCurrentPlayer(nextPlayer);
+
+                // **Vigtigt! Fortsæt rækkefølgen korrekt**
+                if (nextPlayerNumber == 0) { // Hvis vi har været igennem alle spillere
                     step++;
                     if (step < Player.NO_REGISTERS) {
-                        makeProgramFieldsVisible(step);
                         board.setStep(step);
-                        board.setCurrentPlayer(board.getPlayer(0));
+                        makeProgramFieldsVisible(step);
                     } else {
+                        // Hvis alle kort er brugt, afslut aktiveringsfasen og start en ny runde
+                        executeFieldActions();
                         startProgrammingPhase();
+                        return;
                     }
                 }
+
+                // **Sikrer at den næste spiller får deres tur uden at fjerne noget**
+                board.setPhase(Phase.ACTIVATION);
+                executeNextStep();
             } else {
-                // this should not happen
+                // Dette bør aldrig ske
                 assert false;
             }
         } else {
-            // this should not happen
+            // Dette bør aldrig ske
             assert false;
         }
     }
+
 
     private void executeFieldActions() {
         for(int i = 0; i < board.getPlayersNumber(); i++) {
@@ -258,22 +270,40 @@ public class GameController {
     }
 
     private void endPlayerInteraction(Player player) {
-
         board.setPhase(Phase.INTERACTION_FINISHED);
-        /*int nextPlayerNumber = (board.getPlayerNumber(player) + 1) % board.getPlayersNumber();
-        Player nextPlayer = board.getPlayer(nextPlayerNumber);
-        board.setCurrentPlayer(nextPlayer);*/
-        continuePrograms();
+
+        int step = board.getStep(); // Hent nuværende step
+        int currentPlayerIndex = board.getPlayerNumber(player);
+        int nextPlayerIndex = (currentPlayerIndex + 1) % board.getPlayersNumber();
+        Player nextPlayer = board.getPlayer(nextPlayerIndex);
+
+        // **Sørg for, at vi ikke ændrer næste spillers program**
+        board.setCurrentPlayer(nextPlayer);
+
+        // **Gå videre i kortsekvensen, men kun hvis alle spillere har haft tur**
+        if (nextPlayerIndex == 0) { // Hvis vi har været igennem alle spillere
+            step++;
+            if (step < Player.NO_REGISTERS) {
+                board.setStep(step);
+                makeProgramFieldsVisible(step);
+            } else {
+                // Hvis alle kort er brugt, afslut fasen og start en ny programmeringsfase
+                executeFieldActions();
+                startProgrammingPhase();
+                return;
+            }
+        }
+
+        // **Sikrer at spillet fortsætter normalt for næste spiller**
+        board.setPhase(Phase.ACTIVATION);
+        executeNextStep();
     }
 
-
-
-
-
     // TODO V2
-    public void move (Player player, Heading heading) {
+    public void move(Player player, Heading heading) {
         Space currentSpace = player.getSpace();
         Space nextSpace = board.getNeighbour(currentSpace, heading);
+
         if (nextSpace != null) {
             if (nextSpace.getPlayer() != null) { // Hvis en spiller allerede står der
                 move(nextSpace.getPlayer(), heading); // Skub den anden spiller videre i samme retning
@@ -281,10 +311,19 @@ public class GameController {
             if (nextSpace.getPlayer() == null) { // Hvis feltet er ledigt efter skubning
                 currentSpace.setPlayer(null);
                 nextSpace.setPlayer(player);
-            }
 
+                // **Tæl antal træk korrekt**
+                board.setCounter();
+
+                // **Tjek om der er en checkpoint-handling på dette felt**
+                for (FieldAction action : nextSpace.getActions()) {
+                    action.doAction(this, nextSpace); // Kald checkpoint-logikken
+                }
+            }
         }
     }
+
+
 
     public void moveForward(@NotNull Player player) {
         move(player, player.getHeading());
@@ -366,14 +405,12 @@ public class GameController {
 
     private void stopGame() {
         board.setPhase(Phase.INITIALISATION); // Sæt spillet tilbage til start
-        System.out.println("Spillet er nu slut!");
     }
 
     void checkWinCondition(Player player) {
         int totalCheckpoints = 3; // Antal checkpoints i spillet
 
         if (player.getCheckpointCount() == totalCheckpoints) {
-            System.out.println("Spiller " + player.getName() + " har vundet!");
             showWinnerPopup(player);
             stopGame();
         }
