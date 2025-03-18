@@ -66,6 +66,9 @@ public class SpaceView extends StackPane implements ViewObserver {
             this.setStyle("-fx-background-color: black;");
         }
 
+        // updatePlayer();
+
+        // This space view should listen to changes of the space
         space.attach(this);
         update(space);
     }
@@ -117,22 +120,25 @@ public class SpaceView extends StackPane implements ViewObserver {
 
     @Override
     public void updateView(Subject subject) {
+        // Kontrollerer om opdateringen er relevant for dette 'space'
         if (subject == this.space) {
+            // fjerner tidligere grafik
             this.getChildren().clear();
 
+            // Skifter baggrundsfarve på 'space' position
             if ((space.x + space.y) % 2 == 0) {
-                this.setStyle("-fx-background-color: white;");
+                this.setStyle("-fx-background-color: white;"); // Hvid baggrund
             } else {
-                this.setStyle("-fx-background-color: black;");
+                this.setStyle("-fx-background-color: black;"); // Sort baggrund
             }
-            drawWalls();
+            drawWalls(); // Tegner vægge i dette 'space'
 
             // XXX A3: drawing walls and action on the space (could be done
             //         here); it would be even better if fixed things on
             //         spaces  are only drawn once (and not on every update)
             drawConveyorBelt();
             drawCheckPoint();
-            updatePlayer();
+            updatePlayer(); // Opdaterer spillerens visning i 'space'
         }
     }
     private void drawConveyorBelt() {
@@ -140,13 +146,14 @@ public class SpaceView extends StackPane implements ViewObserver {
             if (action instanceof ConveyorBelt) {
                 ConveyorBelt belt = (ConveyorBelt) action;
 
+                // Opret en pil (trekant)
                 Polygon arrow = new Polygon(
                         0.0, 0.0,
                         10.0, 20.0,
                         20.0, 0.0
                 );
-                arrow.setFill(Color.GRAY);
-                arrow.setRotate((90 * belt.getHeading().ordinal()) % 360);
+                arrow.setFill(Color.GRAY); // Sætter farven til grå
+                arrow.setRotate((90 * belt.getHeading().ordinal()) % 360); // Roterer pilen efter heading
 
                 this.getChildren().add(arrow);
 
@@ -159,6 +166,7 @@ public class SpaceView extends StackPane implements ViewObserver {
                 Checkpoint checkpoint = (Checkpoint) action;
                 int checkpointNumber = checkpoint.getCheckpoint();
 
+                // Opret en sekskant (hexagon) som repræsentation af checkpointet
                 Polygon hexagon = new Polygon(
                         0.0, -10.0,
                         8.66, -5.0,
@@ -168,12 +176,14 @@ public class SpaceView extends StackPane implements ViewObserver {
                         -8.66, -5.0
                 );
 
-                hexagon.setFill(Color.YELLOW);
-                hexagon.setStroke(Color.BLACK);
-                Text numberText = new Text(String.valueOf(checkpointNumber));
-                numberText.setFont(new Font(14));
+                hexagon.setFill(Color.YELLOW); // Sætter farven til gul
+                hexagon.setStroke(Color.BLACK); // Tilføjer sort kant
+
+                Text numberText = new Text(String.valueOf(checkpointNumber)); // Konverter tallet til tekst
+                numberText.setFont(new Font(14)); // Sæt skriftstørrelse
 
 
+                // Tilføj hexagon og tal til scenen
                 this.getChildren().addAll(hexagon, numberText);
 
 
@@ -182,3 +192,5 @@ public class SpaceView extends StackPane implements ViewObserver {
     }
 
 }
+
+// Hola

@@ -231,7 +231,6 @@ public class Board extends Subject {
 
     public void setCounter() {
         moveCount++;
-
         notifyChange();
     }
 

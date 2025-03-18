@@ -209,33 +209,40 @@ public class GameController {
                     Command command = card.command;
                     executeCommand(currentPlayer, command);
 
+                    // Hvis vi er i interaktionsfasen (LEFT_OR_RIGHT), vent på spillerens valg
                     if (board.getPhase() == Phase.PLAYER_INTERACTION) {
                         return;
                     }
                 }
 
+                // Skifter korrekt til næste spiller
                 int nextPlayerNumber = (board.getPlayerNumber(currentPlayer) + 1) % board.getPlayersNumber();
                 Player nextPlayer = board.getPlayer(nextPlayerNumber);
                 board.setCurrentPlayer(nextPlayer);
 
-                if (nextPlayerNumber == 0) {
+                // Fortsætter korrekt til næste trin eller næste spiller
+                if (nextPlayerNumber == 0) { // Alle spillere har haft deres tur
                     step++;
                     if (step < Player.NO_REGISTERS) {
                         board.setStep(step);
                         makeProgramFieldsVisible(step);
                     } else {
+                        // Alle kort er brugt, afslut aktiveringsfasen og start ny runde
                         executeFieldActions();
                         startProgrammingPhase();
                         return;
                     }
                 }
 
+                // Sikrer, at næste spiller får sin tur
                 board.setPhase(Phase.ACTIVATION);
                 executeNextStep();
             } else {
+                // Uventet trinindeks; bør aldrig ske
                 assert false;
             }
         } else {
+            // Uventet fase eller null spiller; bør aldrig ske
             assert false;
         }
     }
@@ -299,10 +306,11 @@ public class GameController {
                     board.setCounter();
                     break;
                 case LEFT_OR_RIGHT:
+                    board.setPhase(Phase.PLAYER_INTERACTION);// Afventer spillerens valg
                     board.setCounter();
-                    board.setPhase(Phase.PLAYER_INTERACTION);
                     break;
                 default:
+                    // Ukendt kommando; gør ingenting
             }
         }
     }
@@ -314,6 +322,7 @@ public class GameController {
      * @param player spilleren, som har valgt at dreje til venstre; må ikke være null
      */
     public void playerChoseLeft(@NotNull Player player) {
+        // Spilleren drejer til venstre
         turnLeft(player);
 
         endPlayerInteraction(player);
@@ -381,8 +390,6 @@ public class GameController {
             if (nextSpace.getPlayer() == null) {
                 currentSpace.setPlayer(null);
                 nextSpace.setPlayer(player);
-
-                board.setCounter();
 
                 for (FieldAction action : nextSpace.getActions()) {
                     action.doAction(this, nextSpace);
